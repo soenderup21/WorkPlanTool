@@ -1,3 +1,4 @@
+import java.util.Calendar;
 
 public class MyDate
 {
@@ -5,6 +6,11 @@ public class MyDate
 		day,
 		month,
 		year;
+	Calendar cal = Calendar.getInstance();
+	
+	public MyDate() {
+		setDate(0,0,0);
+	}
 	
 	/**
 	 * Constructor Class
@@ -27,6 +33,36 @@ public class MyDate
 		this.month = month;
 		this.year = year;
 	}
+	
+	public MyDate getCurrentDate() {
+		return new MyDate(
+		cal.get(Calendar.YEAR),
+		cal.get(Calendar.MONTH),
+		cal.get(Calendar.DAY_OF_MONTH));
+	}
+	
+	/**
+	 * Gets current year
+	 * @return
+	 */
+	public int getYear() {
+		return this.year;
+	}
+	/**
+	 * Gets current Month
+	 * @return
+	 */
+	public int getMonth() {
+		return this.month;
+	}
+	/**
+	 * Gets current Day
+	 * @return
+	 */
+	public int getDay() {
+		return this.day;
+	}
+	
 	/**
 	 * returns a boolean that returns true if the inputted date is later than the date of the object itself
 	 * @param isLater

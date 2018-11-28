@@ -10,7 +10,7 @@ public class AnalysisDetails
       this.analysis = analysis;
       trained = true;
       preference = false;
-      lastPerformed = MyDate.getCurrentDate();
+      lastPerformed = new MyDate().getCurrentDate();
    }
    
    public Analysis getAnalysis()
@@ -51,7 +51,7 @@ public class AnalysisDetails
    
    public void checkTrained()
    {
-      MyDate today = MyDate.getCurrentDate();
+      MyDate today = new MyDate().getCurrentDate();
       if(today.getYear() - lastPerformed.getYear() > 1)
          trained = false;
       else if(today.getYear() - lastPerformed.getYear() == 1)
