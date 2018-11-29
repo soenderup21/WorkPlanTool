@@ -18,7 +18,7 @@ import javax.swing.border.TitledBorder;
 
 /**
  * LoginScreen allows the user to login to a given system
- * @author chris
+ * @author MLP
  *
  */
 public class LoginScreen extends JFrame
@@ -60,17 +60,17 @@ public class LoginScreen extends JFrame
 		setSize(200, 150);
 		setVisible(true);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE /*Change to DISPOSE_ON_CLOSE once Fully implemented*/);
 		setLocationRelativeTo(null);
 
 		loginButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
 			    
 				  /*TODO:
+				   * Create User creation screen
 				   * Check password
 				   * Start "Window"
 				   * */
-				  
 			  } 
 			} );
 		
