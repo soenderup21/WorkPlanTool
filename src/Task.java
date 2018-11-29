@@ -10,12 +10,12 @@ public class Task
 		this.analysis = analysis;
 	}
 	public void addEmployee(Employee employee) {
-		employees.add(employee);
+		employees.addEmployee(employee);
 	}
 	public void addEmployees(EmployeeList employees) {
-		for (int i = 0; i < employees.count; i++)
+		for (int i = 0; i < employees.getAllEmployees().size(); i++)
 		{
-			this.employees.add(employees.get(i));
+			this.employees.addEmployee(employees.getAllEmployees().get(i));
 		}
 	}
 	public String toString() {
