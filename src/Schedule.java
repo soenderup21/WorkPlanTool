@@ -8,14 +8,32 @@ public class Schedule
 		
 	}
 	
-	public void setTask(int day, int employeeIndex, Task task) {
+	public enum Day{
+		MONDAY (1),
+		TUESDAY (2),
+		WEDNESDAY (3),
+		THURSDAY (4),
+		FRIDAY (5),
+		SATURDAY (6),
+		SUNDAY (7);
+		
+		int day;
+		Day(int day){
+			this.day = day;
+		}
+	}
+	
+	public void setTask(Day Day, int employeeIndex, Task task) {
+		int day = Day.day;
 		Tasks[day][employeeIndex] = task;
 	}
-	public void removeTask(int day, int employeeIndex) {
+	public void removeTask(Day Day, int employeeIndex) {
+		int day = Day.day;
 		Tasks[day][employeeIndex] = new Task();
 	}
 
-	public Task getTask(int day, int employeeIndex) {
+	public Task getTask(Day Day, int employeeIndex) {
+		int day = Day.day;
 		return Tasks[day][employeeIndex];
 	}
 	
