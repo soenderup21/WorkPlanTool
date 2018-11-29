@@ -21,7 +21,7 @@ public class EmployeeList
     * 
     * @param emp the new employee added to the list
     */
-   public void addEmployee(Employee emp)
+   public void add(Employee emp)
    {
       boolean ok = true;
       for(int i = 0; i < employees.size(); ++i)
