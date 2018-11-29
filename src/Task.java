@@ -19,7 +19,7 @@ public class Task
 		}
 	}
 	public String toString() {
-		return "TO BE DETERMINED";
+		return date.toString() + "idkidkidkidk";
 	}
 	
 }
