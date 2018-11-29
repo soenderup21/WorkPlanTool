@@ -16,6 +16,11 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
+/**
+ * LoginScreen allows the user to login to a given system
+ * @author chris
+ *
+ */
 public class LoginScreen extends JFrame
 {
 	private JPanel containerPanel;
@@ -25,6 +30,10 @@ public class LoginScreen extends JFrame
 	private JPasswordField passwordField;
 	private JButton loginButton;
     
+	/**
+	 * First screen the user will see
+	 * @param title of the program
+	 */
 	public LoginScreen(String title) {
 		super(title);
 		
