@@ -6,7 +6,7 @@ public class Task
 	private MyDate date;
 	
 	/**
-	 * constructor that allows for an empty tast
+	 * constructor that allows for an empty task
 	 */
 	public Task() {
 		
@@ -28,7 +28,7 @@ public class Task
 		employees.add(employee);
 	}
 	/**
-	 * adds a multiple of employee to employee
+	 * adds a multiple of employee to employees
 	 * @param employees
 	 */
 	public void addEmployees(EmployeeList employees) {
