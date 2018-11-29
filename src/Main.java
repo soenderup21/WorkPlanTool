@@ -3,6 +3,7 @@ public class Main
 {
    public static void main(String[] args)
    {
-      System.out.println("Hello people");
+	   //execute: Start program and login screen
+	   LoginScreen LoginFrame = new LoginScreen("WorkPlanTool 0.1.1");
    }
 }
