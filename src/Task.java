@@ -5,6 +5,10 @@ public class Task
 	private Analysis analysis;
 	private MyDate date;
 	
+	public Task() {
+		
+	}
+	
 	public Task(MyDate date, Analysis analysis) {
 		this.date = date;
 		this.analysis = analysis;
@@ -18,8 +22,25 @@ public class Task
 			this.employees.addEmployee(employees.getAllEmployees().get(i));
 		}
 	}
+	/*
+	public boolean equals(Task task) {
+		if (this.employees.equals(task.employees))
+		{
+			if (this.analysis.equals(task.analysis))
+			{
+				if (this.date.equals(task.date))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	*/
+	
 	public String toString() {
 		return date.toString() + "idkidkidkidk";
 	}
+	
+	
 	
 }
