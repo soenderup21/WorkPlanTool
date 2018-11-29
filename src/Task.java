@@ -14,12 +14,12 @@ public class Task
 		this.analysis = analysis;
 	}
 	public void addEmployee(Employee employee) {
-		employees.addEmployee(employee);
+		employees.add(employee);
 	}
 	public void addEmployees(EmployeeList employees) {
 		for (int i = 0; i < employees.getAllEmployees().size(); i++)
 		{
-			this.employees.addEmployee(employees.getAllEmployees().get(i));
+			this.employees.add(employees.getAllEmployees().get(i));
 		}
 	}
 	/*
