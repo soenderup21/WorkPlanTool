@@ -11,7 +11,7 @@ public class User
 	 * @param Username
 	 * @param Password
 	 */
-	public User(String Username, String Password) {
+	public User(String Username, char[] Password) {
 		this.Username = Username;
 		this.pwdHash = Hasher(Password);
 	}
@@ -21,10 +21,10 @@ public class User
 	 * @param Input
 	 * @return 		returns hashed (SHA-256) input
 	 */
-	private String Hasher(String Input) {
+	private String Hasher(char[] Input) {
 		try
 		{
-			byte[] PasswordBytes = Input.getBytes("Latin1");
+			byte[] PasswordBytes = Input.toString().getBytes("Latin1");
 			MessageDigest md = MessageDigest.getInstance("SHA-256");	
 			md.update(PasswordBytes);
 			return byteArrayToString(md.digest(PasswordBytes));
@@ -40,7 +40,7 @@ public class User
 	 * @param pwd
 	 * @return 	returns boolean that indicates access granted
 	 */
-	public boolean CheckPwd(String pwd) {
+	public boolean CheckPwd(char[] pwd) {
 		String Hash = Hasher(pwd);
 		if (Hash.equals(null))
 		{
@@ -58,7 +58,7 @@ public class User
 	 * @param newPassword
 	 * @param oldPassword
 	 */
-	public void setpassword(String newPassword, String oldPassword) {
+	public void setpassword(char[] newPassword, char[] oldPassword) {
 		if (CheckPwd(oldPassword))
 		{
 			String Hash = Hasher(newPassword);
@@ -75,7 +75,7 @@ public class User
 		return this.Username;
 	}
 	
-	public void setUsername(String newUsername, String Password) {
+	public void setUsername(String newUsername, char[] Password) {
 		if (CheckPwd(Password))
 		{
 			this.Username = newUsername;
@@ -103,8 +103,7 @@ public class User
 	}
 	
 	
-	public void Login(char[] Password) {
-		String password = Password.toString();
+	public void Login(char[]password) {
 		if (Hasher(password) == this.pwdHash) {
 			this.LoginState = true;
 		}

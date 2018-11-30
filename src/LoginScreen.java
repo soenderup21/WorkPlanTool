@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
  */
 public class LoginScreen extends JFrame
 {
+	
 	private JPanel containerPanel;
 	private JLabel usernameLabel;
 	private JTextField usernameField;
@@ -69,7 +70,11 @@ public class LoginScreen extends JFrame
 					if (Users[i].getUsername().equals(usernameField.getText())) {
 						Users[i].Login(pwdField.getPassword());
 						if (Users[i].getLoginState()) {
-							//pass user i to Window to initialize program
+							Window window = new Window(Users[i], title);
+							dispose();
+						}
+						else {
+							//error wrong password or username
 						}
 						
 					}

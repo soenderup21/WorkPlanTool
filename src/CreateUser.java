@@ -58,9 +58,13 @@ super(title);
 		
 		createUserButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
-				
-				
-				  
+				 User user = new User(usernameLabel.getText(), passwordField.getPassword());			
+				 FileManager.saveUser(user);
+				 user.Login(passwordField.getPassword());
+				 if (user.getLoginState()) {
+					 Window window = new Window(user, title);
+					 dispose();	
+				 }
 			  } 
 			} );
 		
