@@ -31,7 +31,7 @@ public class User
 		}
 		catch (Exception e)
 		{
-			System.out.println("Error: Hashing failure");
+			System.out.println("Error: Hashing failure: " + e);
 			return null;
 		}
 	}

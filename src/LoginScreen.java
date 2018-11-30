@@ -43,8 +43,8 @@ public class LoginScreen extends JFrame
 		usernameLabel = new JLabel("Username: ");
 		pwdLabel = new JLabel("Password: ");
 		
-		usernameField = new JTextField(0);
-		pwdField = new JPasswordField(0);
+		usernameField = new JTextField(10);
+		pwdField = new JPasswordField(10);
 		pwdField.setEchoChar('*');
 		
 		loginButton = new JButton("Login");
@@ -56,6 +56,7 @@ public class LoginScreen extends JFrame
 		containerPanel.add(loginButton);
 		
 		this.add(containerPanel);
+		this.pack();
 		
 		setSize(200, 150);
 		setVisible(true);
@@ -65,22 +66,26 @@ public class LoginScreen extends JFrame
 
 		loginButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
-			    User Users[] = FileManager.getUsers();
-			    for (int i = 0; i < Users.length; i++) {
-					if (Users[i].getUsername().equals(usernameField.getText())) {
-						Users[i].Login(pwdField.getPassword());
-						if (Users[i].getLoginState()) {
-							Window window = new Window(Users[i], title);
-							dispose();
+				  String username = usernameField.getText();
+				  char[] password = pwdField.getPassword();
+				    User Users[] = FileManager.getUsers();
+				    for (int i = 0; i < Users.length; i++) {
+						if (username.equals(username)) {
+							User user = Users[i];
+							//gets stuck here:
+							user.Login(password);
+							if (Users[i].getLoginState()) {
+								Window window = new Window(Users[i], title);
+								dispose();
+							}
+							else {
+								//error wrong password or username
+							}
+							
 						}
-						else {
-							//error wrong password or username
-						}
-						
 					}
-				}
 			  } 
-			} );
-		
+			} );	
 	}
+	
 }
