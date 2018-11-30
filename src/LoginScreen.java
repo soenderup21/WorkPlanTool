@@ -3,11 +3,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,8 +26,8 @@ public class LoginScreen extends JFrame
 	private JPanel containerPanel;
 	private JLabel usernameLabel;
 	private JTextField usernameField;
-	private JLabel passwordLabel;
-	private JPasswordField passwordField;
+	private JLabel pwdLabel;
+	private JPasswordField pwdField;
 	private JButton loginButton;
     
 	/**
@@ -36,23 +36,22 @@ public class LoginScreen extends JFrame
 	 */
 	public LoginScreen(String title) {
 		super(title);
-		
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.Y_AXIS));
 		
 		usernameLabel = new JLabel("Username: ");
-		passwordLabel = new JLabel("Password: ");
+		pwdLabel = new JLabel("Password: ");
 		
 		usernameField = new JTextField(0);
-		passwordField = new JPasswordField(0);
-		passwordField.setEchoChar('*');
+		pwdField = new JPasswordField(0);
+		pwdField.setEchoChar('*');
 		
 		loginButton = new JButton("Login");
 		
 		containerPanel.add(usernameLabel);
 		containerPanel.add(usernameField);
-		containerPanel.add(passwordLabel);
-		containerPanel.add(passwordField);
+		containerPanel.add(pwdLabel);
+		containerPanel.add(pwdField);
 		containerPanel.add(loginButton);
 		
 		this.add(containerPanel);
@@ -65,15 +64,27 @@ public class LoginScreen extends JFrame
 
 		loginButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
+<<<<<<< HEAD
 			    
 				  /*TODO:
 				   * Create User creation screen
 				   * Check password
 				   * Start "Window"
 				   * */
+=======
+			    User Users[] = FileManager.getUsers();
+			    for (int i = 0; i < Users.length; i++) {
+					if (Users[i].getUsername().equals(usernameField.getText())) {
+						Users[i].Login(pwdField.getPassword());
+						if (Users[i].getLoginState()) {
+							//pass user i to Window to initialize program
+						}
+						
+					}
+				}
+>>>>>>> LoginScreen
 			  } 
 			} );
 		
-	}	
-
+	}
 }

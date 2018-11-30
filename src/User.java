@@ -4,6 +4,7 @@ public class User
 {
 	private String Username;
 	private String pwdHash;
+	private boolean LoginState = false;
 	
 	/**
 	 * Constructor that takes username and password when creating a new user
@@ -70,6 +71,10 @@ public class User
 	 * @param newUsername
 	 * @param Password
 	 */
+	public String getUsername() {
+		return this.Username;
+	}
+	
 	public void setUsername(String newUsername, String Password) {
 		if (CheckPwd(Password))
 		{
@@ -92,5 +97,16 @@ public class User
 	    }
 
 	    return file_string;    
+	}
+	public boolean getLoginState() {
+		return this.LoginState;
+	}
+	
+	
+	public void Login(char[] Password) {
+		String password = Password.toString();
+		if (Hasher(password) == this.pwdHash) {
+			this.LoginState = true;
+		}
 	}
 }
