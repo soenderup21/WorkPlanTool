@@ -3,11 +3,11 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,43 +16,37 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
-/**
- * LoginScreen allows the user to login to a given system
- * @author chris
- *
- */
-public class LoginScreen extends JFrame
-{
+public class CreateUser extends JFrame {
 	private JPanel containerPanel;
+	private JLabel promtLabel;
 	private JLabel usernameLabel;
 	private JTextField usernameField;
-	private JLabel pwdLabel;
-	private JPasswordField pwdField;
-	private JButton loginButton;
-    
-	/**
-	 * First screen the user will see
-	 * @param title of the program
-	 */
-	public LoginScreen(String title) {
-		super(title);
+	private JLabel passwordLabel;
+	private JPasswordField passwordField;
+	private JButton createUserButton;
+	
+	public CreateUser(String title) {
+super(title);
+		
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.Y_AXIS));
 		
 		usernameLabel = new JLabel("Username: ");
-		pwdLabel = new JLabel("Password: ");
+		passwordLabel = new JLabel("Password: ");
+		promtLabel = new JLabel("Enter login details:");
 		
 		usernameField = new JTextField(0);
-		pwdField = new JPasswordField(0);
-		pwdField.setEchoChar('*');
+		passwordField = new JPasswordField(0);
+		passwordField.setEchoChar('*');
 		
-		loginButton = new JButton("Login");
+		createUserButton = new JButton("Create User");
 		
+		containerPanel.add(promtLabel);
 		containerPanel.add(usernameLabel);
 		containerPanel.add(usernameField);
-		containerPanel.add(pwdLabel);
-		containerPanel.add(pwdField);
-		containerPanel.add(loginButton);
+		containerPanel.add(passwordLabel);
+		containerPanel.add(passwordField);
+		containerPanel.add(createUserButton);
 		
 		this.add(containerPanel);
 		
@@ -61,21 +55,15 @@ public class LoginScreen extends JFrame
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-
-		loginButton.addActionListener(new ActionListener() { 
+		
+		createUserButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
-			    User Users[] = FileManager.getUsers();
-			    for (int i = 0; i < Users.length; i++) {
-					if (Users[i].getUsername().equals(usernameField.getText())) {
-						Users[i].Login(pwdField.getPassword());
-						if (Users[i].getLoginState()) {
-							//pass user i to Window to initialize program
-						}
-						
-					}
-				}
+				
+				
+				  
 			  } 
 			} );
 		
 	}
+	
 }
