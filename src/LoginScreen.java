@@ -64,14 +64,6 @@ public class LoginScreen extends JFrame
 
 		loginButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
-<<<<<<< HEAD
-			    
-				  /*TODO:
-				   * Create User creation screen
-				   * Check password
-				   * Start "Window"
-				   * */
-=======
 			    User Users[] = FileManager.getUsers();
 			    for (int i = 0; i < Users.length; i++) {
 					if (Users[i].getUsername().equals(usernameField.getText())) {
@@ -82,7 +74,6 @@ public class LoginScreen extends JFrame
 						
 					}
 				}
->>>>>>> LoginScreen
 			  } 
 			} );
 		
