@@ -61,7 +61,7 @@ public class LoginScreen extends JFrame
 		setSize(200, 150);
 		setVisible(true);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE /*Change to DISPOSE_ON_CLOSE once Fully implemented*/);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 
 		loginButton.addActionListener(new ActionListener() { 
