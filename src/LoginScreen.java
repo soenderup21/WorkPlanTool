@@ -75,10 +75,10 @@ public class LoginScreen extends JFrame
 							//gets stuck here:
 							user.Login(password);
 							if (user.getLoginState()) {
+								System.out.println("Login Successful");
 								FileManager.saveUser(user);
 								Main.setUser(user);
 							}
-								System.out.println("Login Failed");	
 							break;	
 							
 						}
