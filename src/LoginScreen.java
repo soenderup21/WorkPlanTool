@@ -74,13 +74,11 @@ public class LoginScreen extends JFrame
 							User user = Users[i];
 							//gets stuck here:
 							user.Login(password);
-							if (Users[i].getLoginState()) {
-								Window window = new Window(Users[i], title);
-								dispose();
+							if (user.getLoginState()) {
+								Main.setUser(user);
 							}
-							else {
-								//error wrong password or username
-							}
+							System.out.println("Login Failed");
+							break;	
 							
 						}
 					}

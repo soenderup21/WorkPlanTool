@@ -7,5 +7,8 @@ public class Window extends JFrame
 	public Window(User user, String title) {
 		super(title);
 		this.user = user;
+		if (!user.getLoginState()) {
+			this.dispose();
+		}
 	}
 }

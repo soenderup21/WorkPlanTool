@@ -3,7 +3,7 @@ import java.security.*;
 public class User
 {
 	private String Username;
-	private String pwdHash;
+	private byte[] pwdHash;
 	private boolean LoginState = false;
 	
 	/**
@@ -21,13 +21,13 @@ public class User
 	 * @param Input
 	 * @return 		returns hashed (SHA-256) input
 	 */
-	private String Hasher(char[] Input) {
+	private byte[] Hasher(char[] Input) {
 		try
 		{
 			byte[] PasswordBytes = Input.toString().getBytes("Latin1");
 			MessageDigest md = MessageDigest.getInstance("SHA-256");	
 			md.update(PasswordBytes);
-			return byteArrayToString(md.digest(PasswordBytes));
+			return md.digest(PasswordBytes);
 		}
 		catch (Exception e)
 		{
@@ -41,13 +41,15 @@ public class User
 	 * @return 	returns boolean that indicates access granted
 	 */
 	public boolean CheckPwd(char[] pwd) {
-		String Hash = Hasher(pwd);
-		if (Hash.equals(null))
+		byte[] Hash = Hasher(pwd);
+		if (Hash == null)
 		{
 			return false;
 		}
-		if (Hasher(pwd).equals(pwdHash))
+
+		if (/*TODO Check if password matches*/ true)
 		{
+			System.out.println("login successful");
 			return true;
 		}
 		return false;
@@ -61,16 +63,11 @@ public class User
 	public void setpassword(char[] newPassword, char[] oldPassword) {
 		if (CheckPwd(oldPassword))
 		{
-			String Hash = Hasher(newPassword);
+			byte[] Hash = Hasher(newPassword);
 			pwdHash = Hash;	
 		}
 	}
 	
-	/**
-	 * Set username using new username and password
-	 * @param newUsername
-	 * @param Password
-	 */
 	public String getUsername() {
 		return this.Username;
 	}
@@ -82,30 +79,15 @@ public class User
 		}
 	}
 	
-	/**
-	 * Converts bytearray to String
-	 * @param _bytes
-	 * @return
-	 */
-	private String byteArrayToString(byte[] _bytes)
-	{
-	    String file_string = "";
-
-	    for(int i = 0; i < _bytes.length; i++)
-	    {
-	        file_string += (char)_bytes[i];
-	    }
-
-	    return file_string;    
-	}
 	public boolean getLoginState() {
 		return this.LoginState;
 	}
 	
 	
-	public void Login(char[]password) {
-		if (Hasher(password) == this.pwdHash) {
+	public void Login(char[] password) {
+		if (CheckPwd(password)) {
 			this.LoginState = true;
+			return;
 		}
 	}
 }
