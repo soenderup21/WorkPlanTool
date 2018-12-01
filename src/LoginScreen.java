@@ -23,7 +23,6 @@ import javax.swing.border.TitledBorder;
  */
 public class LoginScreen extends JFrame
 {
-	
 	private JPanel containerPanel;
 	private JLabel usernameLabel;
 	private JTextField usernameField;
@@ -66,6 +65,9 @@ public class LoginScreen extends JFrame
 
 		loginButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
+				  if (usernameField.getText().equals("") || pwdField.getPassword().toString().equals("")) {
+				  	return;
+				  }
 				  String username = usernameField.getText();
 				  char[] password = pwdField.getPassword();
 				    User Users[] = FileManager.getUsers();
@@ -77,7 +79,10 @@ public class LoginScreen extends JFrame
 							if (user.getLoginState()) {
 								System.out.println("Login Successful");
 								FileManager.saveUser(user);
-								Main.setUser(user);
+								Main.InitializeWithUser(user);
+							}
+							else {
+								System.out.println("Login Failure");
 							}
 							break;	
 							

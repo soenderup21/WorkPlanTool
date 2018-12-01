@@ -42,7 +42,7 @@ public class User
 	}
 	/**
 	 * takes in char[] and spits out byte[]
-	 * Author: https://stackoverflow.com/questions/30560830/generating-an-md5-hash-with-a-char
+	 * Credit to "Conner": https://stackoverflow.com/questions/30560830/generating-an-md5-hash-with-a-char
 	 * @param chars
 	 * @return
 	 */
@@ -66,8 +66,6 @@ public class User
 		{
 			return false;
 		}
-		System.out.println(this.pwdHash);
-		System.out.println(Hash);
 		if (Hash.equals(this.pwdHash))
 		{
 			return true;

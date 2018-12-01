@@ -35,8 +35,8 @@ super(title);
 		passwordLabel = new JLabel("Password: ");
 		promtLabel = new JLabel("Enter login details:");
 		
-		usernameField = new JTextField(0);
-		passwordField = new JPasswordField(0);
+		usernameField = new JTextField(10);
+		passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');
 		
 		createUserButton = new JButton("Create User");
@@ -58,11 +58,15 @@ super(title);
 		
 		createUserButton.addActionListener(new ActionListener() { 
 			  public void actionPerformed(ActionEvent e) { 
+				  CharSequence cs = " ";
+				  	if (usernameField.getText().equals("") || usernameField.getText().contains(cs)) {
+				  		return;
+				  	}
 				 User user = new User(usernameLabel.getText(), passwordField.getPassword());			
 				 FileManager.saveUser(user);
 				 user.Login(passwordField.getPassword());
 				 if (user.getLoginState()) {
-					 Main.setUser(user);
+					 Main.InitializeWithUser(user);
 				 }
 				 System.out.println("Create user failed");
 			  } 
