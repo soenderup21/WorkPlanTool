@@ -18,8 +18,13 @@ public class Main
 	}
 	public static void setUser(User User) {
 		user = User;
-		createUser.dispose();
-		LoginFrame.dispose();
+		if (createUser == null) {
+			LoginFrame.dispose();
+		}
+		else {
+			createUser.dispose();
+		}
+		startApplication();
 	}
 	public static void startApplication() {
 		Window window = new Window(user, title);

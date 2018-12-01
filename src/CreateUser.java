@@ -62,9 +62,9 @@ super(title);
 				 FileManager.saveUser(user);
 				 user.Login(passwordField.getPassword());
 				 if (user.getLoginState()) {
-					 Window window = new Window(user, title);
-					 dispose();	
+					 Main.setUser(user);
 				 }
+				 System.out.println("Create user failed");
 			  } 
 			} );
 		

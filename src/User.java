@@ -49,7 +49,7 @@ public class User
 
 		if (/*TODO Check if password matches*/ true)
 		{
-			System.out.println("login successful");
+			System.out.println("Login Successful");
 			return true;
 		}
 		return false;
