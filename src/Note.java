@@ -72,6 +72,17 @@ public class Note implements Serializable
    }
    
    /**
+    * This method is used to see if the note is connected to the employees availability
+    * to work
+    * @return The method returns true if the note is connected to the employees availability
+    * to work and false if not 
+    */
+   public boolean isAvailability()
+   {
+      return availability;
+   }
+   
+   /**
     * This method is used to copy object of type Note
     * @return The method returns an object of the type Note which carries the same content
     * as the one which it was copied from 
