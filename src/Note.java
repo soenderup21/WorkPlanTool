@@ -1,22 +1,31 @@
+import java.io.Serializable;
+
 /**
  * This class is made to save all kinds of specific notes that might be needed
  * @author Karla Jajic
- * @version 1.0
+ * @version 2.0
  */
-public class Note
+public class Note implements Serializable
 {
    private String note;
-   private boolean availability;
+   private String name;
+   private boolean general;
+   private MyDate date;
    
    /**
     * The constructor creates an object of type note which by default says that note is not
     * connected with employees availability to work 
+    * @param name The parameter of type String which contains the name of the note
     * @param note The parameter of type String which contains the message of the note
+    * @param date The parameter of type MyDate which says to what date the note is related,
+    * it is null when the note is connected to employee information
     */
-   public Note(String note)
+   public Note(String name, String note, MyDate date)
    {
       this.note=note;
-      this.availability=false;
+      this.name=name;
+      this.general=false;
+      this.date=date;
    }
    
    /**
@@ -29,12 +38,70 @@ public class Note
    }
    
    /**
-    * This method is used to specify the note as a note which is connected with employees
-    * availability to work
+    * This method is used to get the message of the specific note
+    * @return The method returns the object of type String that represents the message of
+    * the note
     */
-   public void toAvailable()
+   public String getNote()
    {
-      this.availability=true;
+      return note;
+   }
+   
+   /**
+    * This method is used to change the name of the note
+    * @param name The parameter of type String which contains the name of the note
+    */
+   public void setName(String name)
+   {
+      this.name=name;
+   }
+   
+   /**
+    * This method is used to get the name of the specific note
+    * @return The method returns the object of type String that represents the name of
+    * the note
+    */
+   public String getName()
+   {
+      return name;
+   }
+   
+   /**
+    * This method is used to set the date of the specific note
+    * @param date The parameter of type MyDate which contains the date of the note
+    */
+   public void setDate(MyDate date)
+   {
+      this.date=date;
+   }
+   
+   /**
+    * This method is used to get the date of the specific note
+    * @return The method returns the object of type MyDate that represents the date related
+    * to the note
+    */
+   public MyDate getDate()
+   {
+      return date;
+   }
+   
+   /**
+    * This method is used to specify the note as a note which is related to the whole week, 
+    * not only the parameter date
+    */
+   public void toGeneral()
+   {
+      this.general=true;
+   }
+   
+   /**
+    * This method is used to see if the note is relevant for whole week, not only one day
+    * @return The method returns true if the note is relevant for whole week, false if it
+    * is relevant for one specific date
+    */
+   public boolean isGeneral()
+   {
+      return general;
    }
    
    /**
@@ -44,12 +111,12 @@ public class Note
     */
    public Note copy()
    {
-      if(availability==false)
-      return new Note(note);
+      if(general==false)
+      return new Note(name, note, date);
       else
       {
-         Note n =new Note(note);
-         n.toAvailable();
+         Note n =new Note(name, note, date);
+         n.toGeneral();
          return n;
       }
    }
@@ -66,6 +133,20 @@ public class Note
       if(!(obj instanceof Note))
          return false;
       Note other =(Note)obj;
-      return other.note.equals(note)&&other.availability==availability;
+      return other.note.equals(note)&&other.general==general&&other.name.equals(name)&&other.date.equals(date);
+   }
+   
+   /**
+    * This method is used to present the note in the form of text
+    * @return This method returns an object of type String which carries the information about
+    * specific note
+    */
+   public String toString()
+   {
+      String s="";
+      if(general)
+         s=name+": "+note+"(general)";
+      else s=name+": "+note+"("+date+")";
+      return s;
    }
 }
