@@ -23,3 +23,5 @@
 /NoteTab.class
 /MyFileIO.class
 /MyTextFileIO.class
+/NotePanel$Listener.class
+/NoteTab$Listener.class
