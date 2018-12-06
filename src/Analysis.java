@@ -12,7 +12,7 @@ public class Analysis
    private String name;
    private Color color;
    
-   private Color[] colors = {Color.BLUE, Color.CYAN, Color.gray, Color.green, Color.orange, Color.MAGENTA, Color.RED, Color.YELLOW, Color.WHITE, Color.PINK, Color.BLACK};
+   private Color[] colors = {Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.RED, Color.YELLOW, Color.WHITE, Color.PINK, Color.BLACK};
    
    
    
