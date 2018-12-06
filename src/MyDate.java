@@ -93,7 +93,7 @@ public class MyDate
 	 * @return returns the object it's called from
 	 */
 	public MyDate copy() {
-		return new MyDate(day, month, year);
+		return new MyDate(day, month, year, week);
 	}
 	/**
 	 * @return returns a string that describes the date in written form
