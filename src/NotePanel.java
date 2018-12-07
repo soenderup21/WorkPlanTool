@@ -1,7 +1,7 @@
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,7 +18,7 @@ import javax.swing.ScrollPaneConstants;
 
 public class NotePanel extends JPanel
 {
-   private NoteAdapter adapter;
+   private MyDate temp;
    private JPanel namePanel;
    private JLabel nameLabel;
    private JTextField nameField;
@@ -28,13 +28,11 @@ public class NotePanel extends JPanel
    private JTextArea noteArea;
    
    private JPanel buttonPanel;
-   private JButton createButton;
    private JCheckBox generalCheck;
    
    public NotePanel()
    {
       super();
-      adapter=new NoteAdapter("notes.bin");
       
       namePanel=new JPanel();
       nameLabel=new JLabel("Name: ");
@@ -48,20 +46,17 @@ public class NotePanel extends JPanel
       notePanel.add(noteLabel);
       notePanel.add(noteArea);
       
-      Listener listen = new Listener();
       buttonPanel= new JPanel();
       generalCheck=new JCheckBox("General");
-      createButton =new JButton("Save");
-      generalCheck.addActionListener(listen);
-      createButton.addActionListener(listen);
       buttonPanel.add(generalCheck);
-      buttonPanel.add(createButton);
       
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
       add(namePanel);
       add(notePanel);
       add(buttonPanel);
+      setMaximumSize(new Dimension(400, 300));
    }
+   
    
    public String getName()
    {
@@ -69,7 +64,6 @@ public class NotePanel extends JPanel
       s=nameField.getText();
       return s;
    }
-   
    public void setName(String name)
    {
       nameField.setText(name);
@@ -81,47 +75,71 @@ public class NotePanel extends JPanel
       s=noteArea.getText();
       return s;
    }
-   
    public void setNote(String note)
    {
       nameField.setText(note);
    }
    
-   private class Listener implements ActionListener
+   public void setGeneral(boolean t)
    {
-      public void actionPerformed(ActionEvent e)
+      generalCheck.setSelected(t);
+   }
+   public boolean getGeneral()
+   {
+      if(generalCheck.isSelected()) return true;
+      else return false;
+   }
+   
+   public void setEnabled(boolean t)
+   {
+      if(t)
       {
-         if(e.getSource()==createButton)
-         {
-            JOptionPane jp=new JOptionPane();
-            if(nameField.getText()=="" || noteArea.getText()=="")
-            {
-               /* JOptionPane.showMessageDialog(null, "One of the fields is empty", "Error", JOptionPane.WARNING_MESSAGE);
-               dispose(); */
-            }
-            Note n=new Note(nameField.getText(), noteArea.getText(), null);
-            if(generalCheck.isSelected()) n.toGeneral();
-            NoteList nl=adapter.getAllNotes();
-            nl.addNote(n);
-            adapter.saveNotes(nl);
-            
-            nameField.setText("");
-            noteArea.setText("");
-            generalCheck.setSelected(false);
-            
-            nl=(NoteList)adapter.getAllNotes();
-            System.out.println(nl);
-         }
+         noteArea.setEditable(false);
+         generalCheck.setEnabled(false);
+      }
+      else
+      {
+         noteArea.setEditable(true);
+         generalCheck.setEnabled(true);
       }
    }
    
- public static void main(String[] args)
+   /*private void updateBoxes()
    {
-      NotePanel n=new NotePanel();
-      JFrame frame=new JFrame("Kalendar");
-      Container c = frame.getContentPane();
-      c.add(n);
-      frame.pack();
-      frame.setVisible(true);
-   }
+      int year = 2017+ yearBox.getSelectedIndex();
+      yearBox.removeAllItems();
+      for(int i=1;i<=20; i++)
+         yearBox.addItem(2017+i);
+      if(year==2018 && yearBox.getItemCount()>0)
+         yearBox.setSelectedIndex((int)(temp.getYear()-2017));
+      else
+         yearBox.setSelectedIndex(year);
+      
+      
+      int month=monthBox.getSelectedIndex()+1;
+      monthBox.removeAllItems();
+      for(int i=1;i<=12; i++)
+         monthBox.addItem(getMonthInString(i));
+      if(month==0 && monthBox.getItemCount()>0)
+         monthBox.setSelectedIndex(temp.getMonth()-1);
+      else
+         monthBox.setSelectedIndex(month-1);
+      
+      
+      if(dayBox.isEditable()) 
+      {
+         int day = 1+dayBox.getSelectedIndex();
+         dayBox.removeAllItems();
+         int[] d= getDaysOfMonth(getSelectedMonth());
+         
+         for(int i=1;i<=d.length;i++)
+            dayBox.addItem(d[i]);
+
+         if(day==-1 && dayBox.getItemCount()>0)
+            yearBox.setSelectedIndex(temp.getDay());
+         else
+            yearBox.setSelectedIndex(day-1);
+      }  
+   }*/
+   
 }

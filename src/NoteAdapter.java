@@ -38,7 +38,7 @@ public class NoteAdapter
          }
          catch (IOException e)
          {
-            System.out.println("Error reading file");
+            System.out.println("This is not working");
          }
       return notes;
    }

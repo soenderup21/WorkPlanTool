@@ -1,16 +1,15 @@
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class MyDate
 {
 	private int
 		day,
 		month,
-		year,
-		week;
-	
+		year;
 	
 	public MyDate() {
-		setDate(0,0,0,0);
+		setDate(0,0,0);
 	}
 	
 	/**
@@ -19,8 +18,8 @@ public class MyDate
 	 * @param month
 	 * @param year
 	 */
-	public MyDate(int day, int month, int year, int week ) {
-		setDate(day, month, year, week);
+	public MyDate(int day, int month, int year ) {
+		setDate(day, month, year);
 	}
 	
 	/**
@@ -29,21 +28,32 @@ public class MyDate
 	 * @param month
 	 * @param year
 	 */
-	public void setDate(int day, int month, int year, int week) {
+	public void setDate(int day, int month, int year) {
 		this.day = day;
 		this.month = month;
 		this.year = year;
-		this.week = week;
 	}
 	
+	public void setDay(int day)
+	{
+	   this.day=day;
+	}
+	
+	public void setMonth(int month)
+	{
+	   this.month=month;
+	}
+	
+	public void setYear(int year)
+	{
+	   this.year=year;
+	}
+	
+	
 	public static MyDate getCurrentDate() {
-	   Calendar cal = Calendar.getInstance();
-		return new MyDate(
-		      cal.get(Calendar.DAY_OF_MONTH),
-		      cal.get(Calendar.MONTH),
-		      cal.get(Calendar.YEAR),
-		      cal.get(Calendar.WEEK_OF_YEAR)
-		      );
+	   GregorianCalendar cal = new GregorianCalendar();
+		return new MyDate(cal.get(GregorianCalendar.DATE)-1,cal.get(GregorianCalendar.MONTH)+1
+		      ,cal.get(GregorianCalendar.YEAR));
 	}
 	
 	/**
@@ -93,7 +103,7 @@ public class MyDate
 	 * @return returns the object it's called from
 	 */
 	public MyDate copy() {
-		return new MyDate(day, month, year, week);
+		return new MyDate(day, month, year);
 	}
 	/**
 	 * @return returns a string that describes the date in written form

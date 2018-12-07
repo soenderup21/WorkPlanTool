@@ -121,7 +121,13 @@ public class NoteList implements Serializable
   {
     String s="";
      for(int i=0;i<notes.size();i++)
-        s+=notes.get(i).getName()+"\n";
+        if(notes.get(i).isGeneral()) s+=notes.get(i).getName()+"  (general)"+"\n";
+        else 
+           {
+              if(notes.get(i).getDate()!=null)
+              s+=notes.get(i).getName()+"("+notes.get(i).getDate()+")"+"\n";
+              else s+=notes.get(i).getName()+"\n";
+           }
      return s;
   }
   
