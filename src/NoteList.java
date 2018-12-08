@@ -27,6 +27,7 @@ public class NoteList implements Serializable
   public void addNote(Note note)
   {
      boolean t=false;
+     if(notes.size()==0) notes.add(note);
      for(int i=0;i<notes.size();i++)
         if(note.equals(notes.get(i))) t=true;
      if(!t) notes.add(note);

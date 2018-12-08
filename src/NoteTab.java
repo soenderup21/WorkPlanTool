@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 
-public class NoteTab extends JFrame
+public class NoteTab extends JPanel
 {
    private NoteAdapter adapter;
    private JPanel mainPanel;
@@ -40,7 +41,7 @@ public class NoteTab extends JFrame
    
    public NoteTab()
    {
-      super("Notes");
+      super();
       adapter= new NoteAdapter("notes.bin");
       Listener listen = new Listener();
       
@@ -95,10 +96,11 @@ public class NoteTab extends JFrame
       add(mainPanel); //doesn't work??
       setSize(1000, 700);
       setVisible(true);
+      
+      /*
       setResizable(false);
-
       setDefaultCloseOperation(EXIT_ON_CLOSE);
-      setLocationRelativeTo(null);
+      setLocationRelativeTo(null);*/
    }
    
    //used to set comboBoxes to current date
@@ -180,14 +182,15 @@ public class NoteTab extends JFrame
    
    private void updateYearBox()
    {
-      int year=yearBox.getSelectedIndex()+2016;
+      int year=yearBox.getSelectedIndex();
       yearBox.removeAllItems();
       
-      for(int i=0;i<20;i++)
-         yearBox.addItem(2016+i);
-      if(year==2016 && yearBox.getItemCount()>0)
+      //because we count from 2016 we need to be careful when using info 
+      for(int i=2016;i<2040;i++)
+         yearBox.addItem(i);
+      if(year==-1 && yearBox.getItemCount()>0)
          yearBox.setSelectedIndex(0);
-      else yearBox.setSelectedIndex(year-2016);
+      else yearBox.setSelectedIndex(year);
    }
    
    private void updateMonthBox()
@@ -215,6 +218,7 @@ public class NoteTab extends JFrame
       else dayBox.setSelectedIndex(day);
    }
    
+   //used for making a MyDate object when saving created note
    public MyDate saveDate()
    {
       MyDate newDate = MyDate.getCurrentDate();
@@ -237,7 +241,7 @@ public class NoteTab extends JFrame
          if(e.getSource()==monthBox)
          {
             updateMonthBox();
-            updateDayBox();
+            updateDayBox(); //updating so that user can't pick the wrong date
          }
          
          if(e.getSource()==removeButton)
@@ -249,8 +253,8 @@ public class NoteTab extends JFrame
                {
                   n.removeNote(i);
                   noteP.setName("");
-                 adapter.saveNotes(n);
-                 updateAllNotesArea();
+                  adapter.saveNotes(n);
+                  updateAllNotesArea();
                }
             }
          }
@@ -261,7 +265,7 @@ public class NoteTab extends JFrame
             NoteList n=adapter.getAllNotes();
             Note[] notes=new Note[n.size()];
             notes=n.getAllNotes();
-            if(saveNoteButton.getText().equals("Edit"))
+            if(saveNoteButton.getText().equals("Edit")) //we need to check if the note exists
             {
                for(int i=0;i<notes.length;i++)
                   if(!noteP.getName().equals(notes[i]))
@@ -273,13 +277,7 @@ public class NoteTab extends JFrame
             }
             else 
             {
-               if(noteP.getName()=="" || noteP.getNote()=="")
-                  System.out.println("How to write the error?");
-               Note newNote=new Note(noteP.getName(), noteP.getNote(),saveDate());
-               if(noteP.getGeneral()) newNote.toGeneral();
-               NoteList nl=adapter.getAllNotes();
-               nl.addNote(newNote);
-               adapter.saveNotes(nl);
+               noteP.saveNote(saveDate());
                
                noteP.setName("");
                noteP.setNote("");
@@ -297,7 +295,11 @@ public class NoteTab extends JFrame
    
    public static void main(String[] args)
    {
-      NoteTab n= new NoteTab();
+      JFrame frame=new JFrame("Kalendar");
+      Container c = frame.getContentPane();
+      c.add(new NoteTab());
+      frame.pack();
+      frame.setVisible(true);
    }
    
 }

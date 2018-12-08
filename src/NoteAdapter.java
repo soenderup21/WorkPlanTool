@@ -39,6 +39,8 @@ public class NoteAdapter
          catch (IOException e)
          {
             System.out.println("This is not working");
+            e.printStackTrace();
+
          }
       return notes;
    }
@@ -72,5 +74,20 @@ public class NoteAdapter
          System.out.println("Error writing file");
       }
    }
+   
+  /* public static void main(String[] args)
+   {
+      NoteAdapter adapter=new NoteAdapter("notes.bin");
+      Note n1=new Note("prva","jbdj",null);
+      Note n2=new Note("druga","jbdj",new MyDate(1,1,2018));
+      NoteList nl=new NoteList();
+      nl.addNote(n1);
+      nl.addNote(n2);
+      System.out.println(n1.equals(n2));
+      
+      adapter.saveNotes(nl);
+      NoteList n= adapter.getAllNotes();
+      System.out.println(n);
+   } */
 }
 

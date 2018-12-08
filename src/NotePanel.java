@@ -19,6 +19,7 @@ import javax.swing.ScrollPaneConstants;
 public class NotePanel extends JPanel
 {
    private MyDate temp;
+   private NoteAdapter adapter;
    private JPanel namePanel;
    private JLabel nameLabel;
    private JTextField nameField;
@@ -33,6 +34,7 @@ public class NotePanel extends JPanel
    public NotePanel()
    {
       super();
+      adapter=new NoteAdapter("notes.bin");
       
       namePanel=new JPanel();
       nameLabel=new JLabel("Name: ");
@@ -104,42 +106,23 @@ public class NotePanel extends JPanel
       }
    }
    
-   /*private void updateBoxes()
+   public void saveNote(MyDate date)
    {
-      int year = 2017+ yearBox.getSelectedIndex();
-      yearBox.removeAllItems();
-      for(int i=1;i<=20; i++)
-         yearBox.addItem(2017+i);
-      if(year==2018 && yearBox.getItemCount()>0)
-         yearBox.setSelectedIndex((int)(temp.getYear()-2017));
-      else
-         yearBox.setSelectedIndex(year);
-      
-      
-      int month=monthBox.getSelectedIndex()+1;
-      monthBox.removeAllItems();
-      for(int i=1;i<=12; i++)
-         monthBox.addItem(getMonthInString(i));
-      if(month==0 && monthBox.getItemCount()>0)
-         monthBox.setSelectedIndex(temp.getMonth()-1);
-      else
-         monthBox.setSelectedIndex(month-1);
-      
-      
-      if(dayBox.isEditable()) 
-      {
-         int day = 1+dayBox.getSelectedIndex();
-         dayBox.removeAllItems();
-         int[] d= getDaysOfMonth(getSelectedMonth());
-         
-         for(int i=1;i<=d.length;i++)
-            dayBox.addItem(d[i]);
-
-         if(day==-1 && dayBox.getItemCount()>0)
-            yearBox.setSelectedIndex(temp.getDay());
-         else
-            yearBox.setSelectedIndex(day-1);
-      }  
-   }*/
+      if(nameField.getText()=="" || noteArea.getText()=="")
+         System.out.println("How to write the error?");
+      Note newNote=new Note(nameField.getText(), noteArea.getText(),date);
+      if(getGeneral()) newNote.toGeneral();
+      NoteList nl=adapter.getAllNotes();
+      nl.addNote(newNote);
+      adapter.saveNotes(nl);
+   }
    
+   public static void main(String[] args)
+   {
+      JFrame frame=new JFrame("Kalendar");
+      Container c = frame.getContentPane();
+      c.add(new NotePanel());
+      frame.pack();
+      frame.setVisible(true);
+   }
 }

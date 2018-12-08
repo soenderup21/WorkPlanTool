@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class MyDate
+public class MyDate implements Serializable
 {
 	private int
 		day,
@@ -105,6 +106,15 @@ public class MyDate
 	public MyDate copy() {
 		return new MyDate(day, month, year);
 	}
+	
+	public boolean equals(Object obj)
+	{
+	   if(!(obj instanceof MyDate))
+	      return false;
+	   MyDate other=(MyDate)obj;
+	   return other.day==day && other.month==month && other.year==year;
+	}
+	
 	/**
 	 * @return returns a string that describes the date in written form
 	 */

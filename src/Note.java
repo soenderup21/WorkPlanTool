@@ -123,7 +123,8 @@ public class Note implements Serializable
    
    /**
     * The method is used to check if the object given in parameter is the same as the one
-    * that the method is called on
+    * that the method is called on. We are not checking the date of the note because some
+    * notes don't have dates and it is not that relevant.
     * @param obj The parameter is any Object. We compare the note with this object
     * @return The method returns boolean, true if two objects are the same and false if they
     * are different
@@ -133,7 +134,7 @@ public class Note implements Serializable
       if(!(obj instanceof Note))
          return false;
       Note other =(Note)obj;
-      return other.note.equals(note)&&other.general==general&&other.name.equals(name)&&other.date.equals(date);
+      return other.note.equals(note)&&other.general==general&&other.name.equals(name);
    }
    
    /**
