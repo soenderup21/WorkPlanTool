@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -6,19 +7,19 @@ import java.util.ArrayList;
  *has the information about each employee - name, initials, the analyses they are able to perform and
  *some additional notes
  */
-public class Employee
+public class Employee implements Serializable
 {
    private String name;
    private String initials;
    private ArrayList<AnalysisDetails> analyses;
-   private NoteList noteList;
+   private Note note;
    
    public Employee(String name, String initials)
    {
       this.name = name;
       this.initials = initials;
       analyses = new ArrayList<AnalysisDetails>();
-      noteList = new NoteList();
+      note = null;
    }
    
    public String getIntials()
@@ -44,6 +45,7 @@ public class Employee
    public void addAnalysis(AnalysisDetails analysis)
    {
       analyses.add(analysis);
+      sortAnalysisByPreference();
    }
    
    public boolean equalsInitials(String initials)
@@ -51,12 +53,12 @@ public class Employee
       return this.initials.equals(initials);
    }
    
-   public void addNote(Note note)
+   public void setNote(Note note)
    {
-      noteList.addNote(note);
+      this.note = note;
    }
    
-   public void sortByPreference()
+   public void sortAnalysisByPreference()
    {
       AnalysisDetails aux;
       int count = 0;
