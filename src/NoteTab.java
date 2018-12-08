@@ -5,12 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -21,6 +23,11 @@ public class NoteTab extends JPanel
 {
    private NoteAdapter adapter;
    private JPanel mainPanel;
+   
+   private JRadioButton generalButton;
+   private JRadioButton allNotesButton;
+   private ButtonGroup radioButtons;
+   private JPanel radioButtonsPanel;
    
    private JPanel allNotesPanel;
    private JTextArea allNotesArea;
@@ -41,18 +48,36 @@ public class NoteTab extends JPanel
    
    public NoteTab()
    {
+      //initialiting panel, adapter and adding button listener
       super();
       adapter= new NoteAdapter("notes.bin");
       Listener listen = new Listener();
       
+      //setting radioButtons and adding them to the group and panel
+      generalButton=new JRadioButton("General notes");
+      generalButton.addActionListener(listen);
+      allNotesButton= new JRadioButton("All notes", true);
+      allNotesButton.addActionListener(listen);
+      radioButtons=new ButtonGroup();
+      radioButtons.add(generalButton);
+      radioButtons.add(allNotesButton);
+      radioButtonsPanel= new JPanel();
+      radioButtonsPanel.setLayout(new BoxLayout(radioButtonsPanel, BoxLayout.X_AXIS));
+      radioButtonsPanel.add(generalButton);
+      radioButtonsPanel.add(allNotesButton);
+      
+      //setting notes area, connecting it to the scroll pane
       allNotesPanel=new JPanel();
       allNotesArea=new JTextArea(19, 30);
       allNotesArea.setEditable(false);
       allNotesScrollPane=new JScrollPane(allNotesArea);
       allNotesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+      allNotesPanel.setLayout(new BoxLayout(allNotesPanel, BoxLayout.Y_AXIS));
+      allNotesPanel.add(radioButtonsPanel);
       allNotesPanel.add(allNotesScrollPane);
       updateAllNotesArea();
       
+      //adding buttons that are needed for saving note
       buttonPanel=new JPanel();
       saveNoteButton=new JButton("Edit");
       saveNoteButton.addActionListener(listen);
@@ -61,6 +86,7 @@ public class NoteTab extends JPanel
       buttonPanel.add(saveNoteButton);
       buttonPanel.add(removeButton);
       
+      //adding panel that allowes us to set the date
       dateLabel=new JLabel("Date:   ");
       datePanel =new JPanel();
       datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.X_AXIS));
@@ -79,6 +105,7 @@ public class NoteTab extends JPanel
       dayBox.addActionListener(listen);
       datePanel.add(dayBox);
      
+      //connecting NotePanel with created buttons and comboBoxes
       notePanel=new JPanel();
       noteP=new NotePanel();
       noteP.setEnabled(true);
@@ -175,9 +202,18 @@ public class NoteTab extends JPanel
    
    private void updateAllNotesArea()
    {
-      NoteList n=adapter.getAllNotes();
-      allNotesArea.setText(n.toString());
-      System.out.println(n.toString());
+      if(generalButton.isSelected())
+      {
+         allNotesArea.setText("");
+         NoteList n=adapter.generalNotes();
+         allNotesArea.setText(n.toString());
+      }
+      else
+      {
+         allNotesArea.setText("");
+         NoteList n=adapter.getAllNotes();
+         allNotesArea.setText(n.toString());
+      }
    }
    
    private void updateYearBox()
@@ -233,6 +269,17 @@ public class NoteTab extends JPanel
    {  
       public void actionPerformed(ActionEvent e)
       {
+         //checking what notes should be in the noteArea
+         if(e.getSource()==allNotesButton)
+         {
+            updateAllNotesArea();
+         }
+         if(e.getSource()==generalButton)
+         {
+            updateAllNotesArea();
+         }
+         
+         //changing the date
          if(e.getSource()==yearBox)
          {
             updateYearBox();

@@ -55,7 +55,7 @@ public class NoteAdapter
       NoteList all = getAllNotes();
       NoteList gen= new NoteList();
       for(int i=0;i<all.size();i++)
-         if(!all.getNote(i).isGeneral()) gen.addNote(all.getNote(i));
+         if(all.getNote(i).isGeneral()) gen.addNote(all.getNote(i));
       return gen;
    }
    
