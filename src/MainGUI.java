@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 
 public class MainGUI extends JFrame
@@ -23,8 +24,12 @@ public class MainGUI extends JFrame
    private JPanel analysisTab;
    
    private JLabel testLabel;
+   private JTabbedPane noteTabPane;
    private NotePanel noteP;
-   private JPanel notePanel;
+   private JButton saveNoteButton;
+   private JPanel addNotePanel;
+   private JPanel seeNotesPanel;
+   private JTextArea notesArea;
    private JScrollPane noteScroll;
    
    private JPanel analysisPanel;
@@ -73,22 +78,29 @@ public class MainGUI extends JFrame
       testLabel=new JLabel("     test      ");
       
       noteP = new NotePanel();
-      noteP.setSize(new Dimension(400,300));
-      notePanel = new JPanel();
-      notePanel.add(noteP);
-      //notePanel.setPreferredSize(new Dimension(400,300));
+      noteP.toSmallerSize();
+      addNotePanel = new JPanel();
+      addNotePanel.add(noteP);
+      saveNoteButton=new JButton("Save");
+      addNotePanel.add(saveNoteButton);
       
-      
-      noteScroll = new JScrollPane(notePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+      seeNotesPanel=new JPanel();
+      notesArea= new JTextArea(15,22);
+      notesArea.setEditable(false);
+      noteScroll = new JScrollPane(notesArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-      noteScroll.setMaximumSize(new Dimension(400, 300));
+      seeNotesPanel.add(noteScroll);
+      
+      noteTabPane= new JTabbedPane();
+      noteTabPane.addTab("Add", addNotePanel);
+      noteTabPane.addTab("See", seeNotesPanel);
       
       sidePanel=new JPanel();
       sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
       sidePanel.setMaximumSize(new Dimension(350, 700));
       sidePanel.setMinimumSize(new Dimension(350, 700));
       sidePanel.add(testLabel);
-      sidePanel.add(noteScroll);
+      sidePanel.add(noteTabPane);
       sidePanel.setBackground(Color.RED);
       
       footerPanel=new JPanel();

@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 public class NotePanel extends JPanel
 {
@@ -27,6 +28,7 @@ public class NotePanel extends JPanel
    private JPanel notePanel;
    private JLabel noteLabel;
    private JTextArea noteArea;
+   private JScrollPane noteScroll;
    
    private JPanel buttonPanel;
    private JCheckBox generalCheck;
@@ -45,8 +47,10 @@ public class NotePanel extends JPanel
       notePanel=new JPanel();
       noteLabel=new JLabel("Note: ");
       noteArea=new JTextArea(12, 25);
+      noteScroll= new JScrollPane(noteArea);
+      noteScroll.setSize(100, 100);
       notePanel.add(noteLabel);
-      notePanel.add(noteArea);
+      notePanel.add(noteScroll);
       
       buttonPanel= new JPanel();
       generalCheck=new JCheckBox("General");
@@ -56,7 +60,6 @@ public class NotePanel extends JPanel
       add(namePanel);
       add(notePanel);
       add(buttonPanel);
-      setMaximumSize(new Dimension(400, 300));
    }
    
    
@@ -117,18 +120,23 @@ public class NotePanel extends JPanel
       adapter.saveNotes(nl);
    }
    
-   public void setSize(Dimension d)
+   //we want to be able to use this panel in more places
+   public void toSmallerSize()
    {
-      this.setMaximumSize(d);
-      this.setMinimumSize(d);
+      nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+      nameField.setColumns(15);
+      noteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      noteArea.setColumns(17);
+      noteArea.setRows(8);
    }
    
+   //testing the panel
    public static void main(String[] args)
    {
       JFrame frame=new JFrame("Kalendar");
       Container c = frame.getContentPane();
       NotePanel p=new NotePanel();
-      p.setSize(new Dimension(500, 300));
+      p.toSmallerSize();
       c.add(p);
       frame.pack();
       frame.setVisible(true);

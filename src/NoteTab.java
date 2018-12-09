@@ -89,7 +89,7 @@ public class NoteTab extends JPanel
       buttonPanel.add(saveNoteButton);
       buttonPanel.add(removeButton);
       
-      //adding panel that allowes us to set the date
+      //adding panel that allows us to set the date
       dateLabel=new JLabel("Date:   ");
       datePanel =new JPanel();
       datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.X_AXIS));
