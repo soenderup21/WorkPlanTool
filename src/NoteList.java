@@ -126,7 +126,7 @@ public class NoteList implements Serializable
         else 
            {
               if(notes.get(i).getDate()!=null)
-              s+=notes.get(i).getName()+"("+notes.get(i).getDate()+")"+"\n";
+              s+=notes.get(i).getName()+"  ("+notes.get(i).getDate()+")"+"\n";
               else s+=notes.get(i).getName()+"\n";
            }
      return s;

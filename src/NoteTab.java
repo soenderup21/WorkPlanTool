@@ -1,6 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -48,7 +51,7 @@ public class NoteTab extends JPanel
    
    public NoteTab()
    {
-      //initialiting panel, adapter and adding button listener
+      //initializing panel, adapter and adding button listener
       super();
       adapter= new NoteAdapter("notes.bin");
       Listener listen = new Listener();
@@ -79,7 +82,7 @@ public class NoteTab extends JPanel
       
       //adding buttons that are needed for saving note
       buttonPanel=new JPanel();
-      saveNoteButton=new JButton("Edit");
+      saveNoteButton=new JButton("Save");
       saveNoteButton.addActionListener(listen);
       removeButton=new JButton("Remove");
       removeButton.addActionListener(listen);
@@ -104,6 +107,9 @@ public class NoteTab extends JPanel
       dayBox=new JComboBox<Integer>();
       dayBox.addActionListener(listen);
       datePanel.add(dayBox);
+      
+      setDate(MyDate.getCurrentDate());
+      datePanel.setVisible(false);
      
       //connecting NotePanel with created buttons and comboBoxes
       notePanel=new JPanel();
@@ -115,13 +121,21 @@ public class NoteTab extends JPanel
       notePanel.add(buttonPanel);
       
       mainPanel= new JPanel();
-      mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-      mainPanel.add(allNotesPanel);
-      mainPanel.add(notePanel);
-      mainPanel.setMaximumSize(new Dimension(800, 400));
+      GridBagLayout gridbag = new GridBagLayout();
+      GridBagConstraints c = new GridBagConstraints();
+      c.fill = GridBagConstraints.HORIZONTAL;
+      mainPanel.setLayout(gridbag);
       
-      add(mainPanel); //doesn't work??
-      setSize(1000, 700);
+      mainPanel.add(allNotesPanel,c);
+      //because we want to make space between two panels
+      c.insets=new Insets(0,90,0,0); //padding
+      mainPanel.add(notePanel,c);
+      
+      //setting to the center so we can align whole panel in the center
+      c.fill = GridBagConstraints.CENTER;
+      gridbag.setConstraints(this, c);
+      setLayout(gridbag);
+      add(mainPanel);
       setVisible(true);
       
       /*
@@ -130,10 +144,26 @@ public class NoteTab extends JPanel
       setLocationRelativeTo(null);*/
    }
    
-   //used to set comboBoxes to current date
-   private void setDate()
+   private boolean alreadyThere()
    {
-      MyDate temp= MyDate.getCurrentDate();
+      boolean t=false;
+      
+      NoteList n=adapter.getAllNotes();
+      Note[] notes=new Note[n.size()];
+      notes=n.getAllNotes();
+      
+      for(int i=0;i<notes.length;i++)
+         if(noteP.getName().equals(notes[i].getName())) t=true;
+      
+      //want to check if there is no input text
+      if(noteP.getName().equals(" ")) t=false;
+      
+      return t;
+   }
+   
+   //used to set comboBoxes to current date
+   private void setDate(MyDate temp)
+   {
       
       yearBox.removeAllItems();
       for(int i=0;i<20;i++)
@@ -149,7 +179,7 @@ public class NoteTab extends JPanel
       int numberOfDays=getDaysOfMonth(temp.getMonth(), temp.getYear());
          for(int i=1;i<=numberOfDays;i++)
             dayBox.addItem(i);
-         dayBox.setSelectedIndex(temp.getDay());
+         dayBox.setSelectedIndex(temp.getDay()-1);
       
    }
  
@@ -294,15 +324,31 @@ public class NoteTab extends JPanel
          if(e.getSource()==removeButton)
          {
             NoteList n=adapter.getAllNotes();
-            for(int i=0;i<n.size();i++)
+            //we want to check if user is sure in removing the note
+            int choice = JOptionPane.showConfirmDialog(getParent(), "Do you want to remove the note?"); 
+            if(choice==JOptionPane.YES_OPTION) 
             {
-               if(noteP.getName().equals(n.getNote(i).getName()))
+               System.out.println("Choice is yes"); 
+               for(int i=0;i<n.size();i++)
                {
-                  n.removeNote(i);
-                  noteP.setName("");
-                  adapter.saveNotes(n);
-                  updateAllNotesArea();
+                  if(noteP.getName().equals(n.getNote(i).getName()))
+                  {
+                     n.removeNote(i);
+                     noteP.setName("");
+                     adapter.saveNotes(n);
+                     updateAllNotesArea();
+                  }
                }
+            }
+            else if(choice==JOptionPane.NO_OPTION)
+            {
+               System.out.println("Choice is no"); 
+               noteP.setName("");
+            }
+            else if(choice==JOptionPane.CANCEL_OPTION)
+            {
+               System.out.println("Choice is cancel");
+               noteP.setName("");
             }
          }
          
@@ -312,31 +358,132 @@ public class NoteTab extends JPanel
             NoteList n=adapter.getAllNotes();
             Note[] notes=new Note[n.size()];
             notes=n.getAllNotes();
-            if(saveNoteButton.getText().equals("Edit")) //we need to check if the note exists
+            
+            if(alreadyThere() && saveNoteButton.getText().equals("Save"))
             {
-               for(int i=0;i<notes.length;i++)
-                  if(!noteP.getName().equals(notes[i]))
-                  {
-                     noteP.setEnabled(false);
-                     saveNoteButton.setText("Save");
-                     setDate();
-                  }
+               int choice = JOptionPane.showConfirmDialog(getParent(), "Do you want to edit the note?"); 
+               if(choice==JOptionPane.YES_OPTION) 
+               {
+                  System.out.println("Choice is yes"); 
+                  for(int i=0;i<notes.length;i++)
+                     if(noteP.getName().equals(notes[i].getName()))
+                     {
+                        noteP.setEnabled(false);
+                        noteP.setNote(notes[i].getNote());
+                        if(notes[i].isGeneral()) noteP.setGeneral(true);
+                        datePanel.setVisible(true);
+                        setDate(notes[i].getDate());
+                        saveNoteButton.setText("Edit");
+                     }
+               }
+               else if(choice==JOptionPane.NO_OPTION)
+               {
+                  System.out.println("Choice is no"); 
+                  noteP.setName("");
+               }
+               else if(choice==JOptionPane.CANCEL_OPTION)
+               {
+                  System.out.println("Choice is cancel");
+                  noteP.setName("");
+               }
             }
-            else 
+            else if(alreadyThere()==false && saveNoteButton.getText().equals("Save"))
             {
-               noteP.saveNote(saveDate());
+               noteP.setEnabled(false);
+               datePanel.setVisible(true);
+               setDate(MyDate.getCurrentDate());
+               saveNoteButton.setText("New");
+            }
+            else
+            {
+             //edits if it's already there, makes new one if there isn't
+               if(alreadyThere())
+               {
+                  for(int i=0;i<notes.length;i++)
+                     if(noteP.getName().equals(notes[i].getName()))
+                     {
+                        n.removeNote(i);
+                        Note newN=new Note(noteP.getName(), noteP.getNote(), saveDate());
+                        if(noteP.getGeneral()) newN.toGeneral();
+                        n.addNote(newN);
+                        
+                        adapter.saveNotes(n);
+                     }
+               }
+               else noteP.saveNote(saveDate());
                
+               //clears up everything
                noteP.setName("");
                noteP.setNote("");
                noteP.setGeneral(false);
-               
-               //kako ocistit nakon spremanja??
+               datePanel.setVisible(false);
                
                noteP.setEnabled(true);
                updateAllNotesArea();
-               saveNoteButton.setText("Edit");
+               saveNoteButton.setText("Save");
             }
+            
          }
+         
+         /*if(e.getSource()==saveNoteButton)
+         {
+            updateAllNotesArea();
+            NoteList n=adapter.getAllNotes();
+            Note[] notes=new Note[n.size()];
+            notes=n.getAllNotes();
+            if(saveNoteButton.getText().equals("Save"))
+            {
+               if(alreadyThere())
+               {
+                  for(int i=0;i<notes.length;i++)
+                     if(noteP.getName().equals(notes[i].getName()))
+                     {
+                        noteP.setEnabled(false);
+                        noteP.setNote(notes[i].getNote());
+                        if(notes[i].isGeneral()) noteP.setGeneral(true);
+                        datePanel.setVisible(true);
+                        setDate(notes[i].getDate());
+                        saveNoteButton.setText("Edit");
+                     }
+               }
+               else
+               {
+                  noteP.setEnabled(false);
+                  datePanel.setVisible(true);
+                  setDate(MyDate.getCurrentDate());
+                  saveNoteButton.setText("New");
+               }
+                 
+            }
+            else
+            {
+               //edits if it's already there, makes new one if there isn't
+               if(alreadyThere())
+               {
+                  for(int i=0;i<notes.length;i++)
+                     if(noteP.getName().equals(notes[i].getName()))
+                     {
+                        n.removeNote(i);
+                        Note newN=new Note(noteP.getName(), noteP.getNote(), saveDate());
+                        if(noteP.getGeneral()) newN.toGeneral();
+                        n.addNote(newN);
+                        
+                        adapter.saveNotes(n);
+                     }
+               }
+               else noteP.saveNote(saveDate());
+               
+               //clears up everything
+               noteP.setName("");
+               noteP.setNote("");
+               noteP.setGeneral(false);
+               datePanel.setVisible(false);
+               
+               noteP.setEnabled(true);
+               updateAllNotesArea();
+               saveNoteButton.setText("Save");
+            }
+         }*/
       }
    }
    

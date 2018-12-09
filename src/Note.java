@@ -86,8 +86,7 @@ public class Note implements Serializable
    }
    
    /**
-    * This method is used to specify the note as a note which is related to the whole week, 
-    * not only the parameter date
+    * This method is used to specify the note as general
     */
    public void toGeneral()
    {

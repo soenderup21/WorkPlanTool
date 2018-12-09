@@ -79,7 +79,7 @@ public class NotePanel extends JPanel
    }
    public void setNote(String note)
    {
-      nameField.setText(note);
+      noteArea.setText(note);
    }
    
    public void setGeneral(boolean t)
@@ -117,11 +117,19 @@ public class NotePanel extends JPanel
       adapter.saveNotes(nl);
    }
    
+   public void setSize(Dimension d)
+   {
+      this.setMaximumSize(d);
+      this.setMinimumSize(d);
+   }
+   
    public static void main(String[] args)
    {
       JFrame frame=new JFrame("Kalendar");
       Container c = frame.getContentPane();
-      c.add(new NotePanel());
+      NotePanel p=new NotePanel();
+      p.setSize(new Dimension(500, 300));
+      c.add(p);
       frame.pack();
       frame.setVisible(true);
    }

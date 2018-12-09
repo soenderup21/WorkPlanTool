@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,7 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
 
 public class MainGUI extends JFrame
 {
@@ -22,6 +25,8 @@ public class MainGUI extends JFrame
    private JLabel testLabel;
    private NotePanel noteP;
    private JPanel notePanel;
+   private JScrollPane noteScroll;
+   
    private JPanel analysisPanel;
    private JPanel sidePanel;
    
@@ -65,10 +70,25 @@ public class MainGUI extends JFrame
       centralPanel.add(headerPanel);
       centralPanel.add(tablePanel);
       
-      testLabel=new JLabel("test");
+      testLabel=new JLabel("     test      ");
+      
+      noteP = new NotePanel();
+      noteP.setSize(new Dimension(400,300));
+      notePanel = new JPanel();
+      notePanel.add(noteP);
+      //notePanel.setPreferredSize(new Dimension(400,300));
+      
+      
+      noteScroll = new JScrollPane(notePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+      noteScroll.setMaximumSize(new Dimension(400, 300));
+      
       sidePanel=new JPanel();
       sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
+      sidePanel.setMaximumSize(new Dimension(350, 700));
+      sidePanel.setMinimumSize(new Dimension(350, 700));
       sidePanel.add(testLabel);
+      sidePanel.add(noteScroll);
       sidePanel.setBackground(Color.RED);
       
       footerPanel=new JPanel();
