@@ -41,7 +41,7 @@ public class AnalysisTab extends JPanel
 		
 		nameField.getDocument().addDocumentListener(new DocumentListener() {
 			public void chnagedUpdate(DocumentEvent e) {
-				//save analysis here:
+				//save analysis here text:
 				
 				
 			}
