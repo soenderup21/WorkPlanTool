@@ -12,7 +12,7 @@ public class AnalysisList
 	/**
 	 * A no-argument constructor which initializes an ArrayList.
 	 */
-	public AnalysisList() 
+	public AnalysisList()
 	{
 		analysisList = new ArrayList<Analysis>();
 	}
@@ -33,6 +33,11 @@ public class AnalysisList
 	public void removeAnalysis(Analysis analysis)
 	{
 		analysisList.remove(analysis);
+	}
+	
+	public void removeAnalysis(int index)
+	{
+		analysisList.remove(index);
 	}
 	
 	/**
