@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -5,7 +6,7 @@ import java.util.ArrayList;
  * @author Aleksandra Angelova
  * @version 1.0
  */
-public class AnalysisList 
+public class AnalysisList implements Serializable
 {
 	private ArrayList<Analysis> analysisList;
 	

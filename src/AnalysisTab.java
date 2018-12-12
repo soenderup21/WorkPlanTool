@@ -4,31 +4,44 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class AnalysisTab extends JPanel
 {	
+	
    private String[] colors;
    private AnalysisAdapter adapter;
    private JPanel anPanel;
+   private MyListSelectionListener listListener;
    
-   private JTextArea allAnalysisArea;
+   private JList allAnalysisArea;
+   private DefaultListModel<String> listModel;
+   
    private JScrollPane allAnalysisScrollPane;
    private JLabel addAnalysisLabel;
    private JLabel deleteAnalysisLabel;
+   private JLabel employeeLabel;
+   
+   private JList allEmployeesField;
+   private JScrollPane allEmployeesScrollPane;
+   
+   
    private JTextField addAnalysisField;
    private JTextField deleteAnalysisField;
-   private JButton updateAnalysis;
    private JButton addAnalysis;
    private JButton deleteAnalysis;
-   private JComboBox<String> colorsComboBox;
    private JPanel leftPanel;
    private JPanel rightPanel;
    
@@ -36,22 +49,33 @@ public class AnalysisTab extends JPanel
    {
 	   super();
 	   adapter = new AnalysisAdapter("analysis.bin");
-	   colors = new String[] {"red", "pink", "green", "yellow"};
+	   listModel = new DefaultListModel<String>();
+	   listListener = new MyListSelectionListener();
 	   
 	   anPanel = new JPanel();
-	   allAnalysisArea = new JTextArea(350, 350);
-	   allAnalysisArea.setEditable(false);
+	   
+	    allAnalysisArea = new JList<String>(listModel);
+		AnalysisList al = adapter.getAllAnalysis();
+		for (int i = 0; i < al.size(); i++)
+		{
+			listModel.addElement(al.getAnalysis(i).toString());
+		}
+		
+	   allAnalysisArea.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	   allAnalysisArea.addListSelectionListener(listListener);
+	   allAnalysisArea.setVisibleRowCount(15); 
+	   allAnalysisArea.setPreferredSize(new Dimension(250, 300));
 	   
 	   allAnalysisScrollPane = new JScrollPane(allAnalysisArea);
 	   allAnalysisScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 	   
 	   addAnalysisLabel = new JLabel("Add analysis:");
-	   addAnalysisLabel.setPreferredSize(new Dimension(70, 30));
+	   addAnalysisLabel.setPreferredSize(new Dimension(90, 40));
 	   addAnalysisField = new JTextField(15);
 	   addAnalysisField.setEditable(true);
 	   
 	   deleteAnalysisLabel = new JLabel("Delete analysis:");
-	   deleteAnalysisLabel.setPreferredSize(new Dimension(70, 30));
+	   deleteAnalysisLabel.setPreferredSize(new Dimension(90, 40));
 	   deleteAnalysisField = new JTextField(15);
 	   deleteAnalysisField.setEditable(true);
 	   
@@ -59,16 +83,19 @@ public class AnalysisTab extends JPanel
 	   addAnalysis.addActionListener(new TypeListener());
 	   deleteAnalysis = new JButton("Delete");
 	   deleteAnalysis.addActionListener(new TypeListener());
-	   updateAnalysis = new JButton("Update");
-	   updateAnalysis.addActionListener(new TypeListener());
-	   colorsComboBox = new JComboBox<String>(colors);
-	   colorsComboBox.addActionListener(new TypeListener());
-	   colorsComboBox.setPreferredSize(new Dimension(200, 30));
+	   
+	   //FIX THIS 
+	   employeeLabel = new JLabel("Employees which can do that analysis:");
+	   employeeLabel.setPreferredSize(new Dimension(90, 40));
+	   allEmployeesField  = new JList();
+	   allEmployeesScrollPane = new JScrollPane();
+	   
+	   
 	   
 	   leftPanel = new JPanel();
-	   leftPanel.setPreferredSize(new Dimension(350, 350));
+	   leftPanel.setPreferredSize(new Dimension(350, 500));
 	   rightPanel = new JPanel();
-	   rightPanel.setPreferredSize(new Dimension(350, 350));
+	   rightPanel.setPreferredSize(new Dimension(350, 500));
 	   
 	   leftPanel.add(addAnalysisLabel);
 	   leftPanel.add(addAnalysisField);
@@ -76,12 +103,15 @@ public class AnalysisTab extends JPanel
 	   leftPanel.add(deleteAnalysisLabel);
 	   leftPanel.add(deleteAnalysisField);
 	   leftPanel.add(deleteAnalysis);
-	   leftPanel.add(colorsComboBox);
-	   leftPanel.add(updateAnalysis);
-
-	   rightPanel.add(allAnalysisScrollPane);
+	   leftPanel.add(allAnalysisScrollPane);
+	  
+	   rightPanel.add(employeeLabel);
+	   rightPanel.add(allEmployeesScrollPane);
+	   
 	   anPanel.add(leftPanel);
 	   anPanel.add(rightPanel);
+	   
+	   add(anPanel);
    }
    
    private class TypeListener implements ActionListener
@@ -91,8 +121,6 @@ public class AnalysisTab extends JPanel
 		   if(e.getSource() == addAnalysis)
 		   {
 			   String analysisName = addAnalysisField.getText();
-//			   int numColor = colorsComboBox.getSelectedIndex();
-//			   String color = colors[numColor];
 			   Analysis newAnalysis = new Analysis(analysisName);
 			   adapter.saveAnalysis(newAnalysis);
 		   }
@@ -108,6 +136,21 @@ public class AnalysisTab extends JPanel
 			   }
 		   }
 	   }
+   }
+   private class MyListSelectionListener implements ListSelectionListener 
+   {
+      public void valueChanged(ListSelectionEvent e) 
+      {
+         if (e.getSource() == allAnalysisArea)
+         {
+            if (allAnalysisArea.getSelectedValue() instanceof AnalysisList)
+            {
+            	AnalysisList temp = (AnalysisList)allAnalysisArea.getSelectedValue();
+//                firstNameField.setText(temp.getFirstName());
+//                lastNameField.setText(temp.getLastName());
+            }
+         }
+      }
    }
 }
 

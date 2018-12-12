@@ -21,7 +21,7 @@ public class MainGUI extends JFrame
    
    private JPanel employeeTab;
    private NoteTab noteTab;
-   private JPanel analysisTab;
+   private AnalysisTab analysisTab;
    
    private JLabel testLabel;
    private JTabbedPane noteTabPane;
@@ -112,7 +112,7 @@ public class MainGUI extends JFrame
       schedulePanel.add(sidePanel, BorderLayout.EAST);
       schedulePanel.add(footerPanel, BorderLayout.SOUTH);
       
-      analysisTab=new JPanel();
+      analysisTab=new AnalysisTab();
       employeeTab=new JPanel();
       noteTab=new NoteTab();
       

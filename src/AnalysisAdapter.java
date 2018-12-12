@@ -50,9 +50,13 @@ public class AnalysisAdapter {
 	      {
 	         mfio.writeToFile(fileName, analyses);
 	      }
+	      catch (FileNotFoundException e)
+	      {
+	         System.out.println("File not found");
+	      }
 	      catch (IOException e)
 	      {
-	         System.out.println("Error writing file");
+	         System.out.println("IO Error writing to file");
 	      }
 	   }
 	   public void saveAnalysis(Analysis analysis)
@@ -60,13 +64,18 @@ public class AnalysisAdapter {
 		   
 		   try
 		   {
-			   ArrayList<Analysis> allAnalysis = new ArrayList<>();
-			   allAnalysis.add(analysis);
-			   mfio.writeToFile(fileName, allAnalysis);
+			   AnalysisList temp = new AnalysisList();
+			   temp = getAllAnalysis();
+			   temp.addAnalysis(analysis);
+			   mfio.writeToFile(fileName, temp);
 		   }
-		   catch (IOException e)
+		   catch (FileNotFoundException e)
 		      {
-		         System.out.println("Error writing file");
+		         System.out.println("File not found");
+		      }
+		      catch (IOException e)
+		      {
+		         System.out.println("IO Error writing to file");
 		      }
 	   }
 
