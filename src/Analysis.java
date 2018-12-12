@@ -12,9 +12,6 @@ public class Analysis
    private String name;
    private Color color;
    
-   private Color[] colors = {Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN, Color.ORANGE, Color.MAGENTA, Color.RED, Color.YELLOW, Color.WHITE, Color.PINK, Color.BLACK};
-   
-   
    
    /**
     * Contructor for Analysis
@@ -24,7 +21,7 @@ public class Analysis
    {
    	Random rnd = new Random();
       this.name = name;
-      this.color = colors[rnd.nextInt(colors.length)];
+      this.color = new Color(rnd.nextInt(255-100)+100,rnd.nextInt(255-100)+100,rnd.nextInt(255-100)+100);
    }
    
    /**
