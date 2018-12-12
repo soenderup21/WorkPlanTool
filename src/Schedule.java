@@ -8,6 +8,11 @@ public class Schedule
 		
 	}
 	
+	/**
+	 * 
+	 * @author Lenovo
+	 *	
+	 */
 	public enum Day{
 		MONDAY (1),
 		TUESDAY (2),
