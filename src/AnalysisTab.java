@@ -23,6 +23,9 @@ public class AnalysisTab extends JPanel
 	
 	public AnalysisTab() {
 		
+		AnalysisAdapter AA = new AnalysisAdapter("Analysis");
+		AnalysisList AL = AA.getAllAnalysis();
+		
 		containerPanel = new JPanel();
 		containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.Y_AXIS));
 
@@ -33,16 +36,52 @@ public class AnalysisTab extends JPanel
 		
 		nameField = new JTextField(10);
 		
-		list = new JList(/*inseert data here plz!!!*/ );
+		Analysis[] AnalysisArray = new Analysis[AL.size()];
+		for (int i = 0; i < AnalysisArray.length; i++)
+		{
+			AnalysisArray[i] = AL.getAnalysis(i);
+		}
+	
+		
+		list = new JList(AnalysisArray);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setLayoutOrientation(JList.VERTICAL);
 		
 		containerPanel = new JPanel();
 		
 		nameField.getDocument().addDocumentListener(new DocumentListener() {
-			public void chnagedUpdate(DocumentEvent e) {
-				//save analysis here:
+			@Override
+			public void changedUpdate(DocumentEvent e)
+			{
+				AA.saveAnalysis(AL);
+				int i;
+				try
+				{
+					i = list.getSelectedIndex();		
+				}
+				catch (Exception e2)
+				{
+					System.out.println("value not selected: " + e2);
+					return;
+				}
+				if (i != -1)
+				{
+					nameField.setText(AnalysisArray[i].getName());
+				}
 				
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e)
+			{
+				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -52,7 +91,16 @@ public class AnalysisTab extends JPanel
 			@Override
 			public void valueChanged(ListSelectionEvent e)
 			{
-				//Do fancy label stuff
+				int i;
+				try
+				{
+					i = list.getSelectedIndex();		
+				}
+				catch (Exception e2)
+				{
+					System.out.println("value not selected: " + e2);
+				
+				}
 				
 			}
 		});
