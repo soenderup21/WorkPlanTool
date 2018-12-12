@@ -1,4 +1,7 @@
 import java.io.Serializable;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -50,6 +53,23 @@ public class MyDate implements Serializable
 	   this.year=year;
 	}
 	
+	public int getWeek() {
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+		Date date;
+		try
+		{
+			date = df.parse(this.toString());
+		}
+		catch (ParseException e)
+		{
+			System.out.println("Invalid date: " + e);
+			return -1;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.WEEK_OF_YEAR);
+	}
+	
 	
 	public static MyDate getCurrentDate() {
 	   GregorianCalendar cal = new GregorianCalendar();
@@ -78,6 +98,7 @@ public class MyDate implements Serializable
 	public int getDay() {
 		return this.day;
 	}
+	
 	
 	/**
 	 * returns a boolean that returns true if the inputted date is later than the date of the object itself
@@ -119,7 +140,7 @@ public class MyDate implements Serializable
 	 * @return returns a string that describes the date in written form
 	 */
 	public String toString() {
-		return day + "/" + month + "/" + year;
+		return "" + year + month + day;
 	}
 	
 	
