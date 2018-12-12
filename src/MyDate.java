@@ -5,6 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * 
+ * @author chris
+ *
+ */
 public class MyDate implements Serializable
 {
 	private int
@@ -12,6 +17,9 @@ public class MyDate implements Serializable
 		month,
 		year;
 	
+	/**
+	 * Default MyDate Constructor
+	 */
 	public MyDate() {
 		setDate(0,0,0);
 	}
@@ -38,22 +46,71 @@ public class MyDate implements Serializable
 		this.year = year;
 	}
 	
+	/**
+	 * Sets day
+	 * @param day
+	 */
 	public void setDay(int day)
 	{
 	   this.day=day;
 	}
 	
+	/**
+	 * Sets Month
+	 * @param month
+	 */
 	public void setMonth(int month)
 	{
 	   this.month=month;
 	}
 	
+	/**
+	 * setYear
+	 * @param year
+	 */
 	public void setYear(int year)
 	{
 	   this.year=year;
 	}
 	
-	public int getWeek() {
+	/**
+	 * returns an integer indicating the day so 2 = Tuesday
+	 * @return integer
+	 */
+	public int getDayOfWeekIndex() {
+		Calendar cal = getGregorian();
+		return cal.get(Calendar.DAY_OF_WEEK);
+	}
+	
+	/**
+	 * Converts a day of week index to a string so 2 = "Tuesday"
+	 * @return String
+	 */
+	public String getDayOfWeek() {
+		switch (getDayOfWeekIndex()) {
+		case 1:
+			return "Monday";
+		case 2:
+			return "Tuesday";
+		case 3:
+			return "Wednesday";
+		case 4:
+			return "Thursday";
+		case 5:
+			return "Friday";
+		case 6:
+			return "Saturday";
+		case 7:
+			return "Sunday";
+		}
+		return "-1";
+	}
+	
+	/**
+	 * returns a calendar with the date of this object this object can calculate Week, and day indexes
+	 * @return Calendar 
+	 */
+	public Calendar getGregorian() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		Date date;
 		try
@@ -63,14 +120,26 @@ public class MyDate implements Serializable
 		catch (ParseException e)
 		{
 			System.out.println("Invalid date: " + e);
-			return -1;
+			return null;
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
+		return cal;
+	}
+	
+	/**
+	 * gets week
+	 * @return int
+	 */
+	public int getWeek() {
+		Calendar cal = getGregorian();
 		return cal.get(Calendar.WEEK_OF_YEAR);
 	}
 	
-	
+	/**
+	 * returns today
+	 * @return MyDate
+	 */
 	public static MyDate getCurrentDate() {
 	   GregorianCalendar cal = new GregorianCalendar();
 		return new MyDate(cal.get(GregorianCalendar.DATE)-1,cal.get(GregorianCalendar.MONTH)+1
