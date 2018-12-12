@@ -78,13 +78,13 @@ public class MyDate implements Serializable
 	 * @return integer
 	 */
 	public int getDayOfWeekIndex() {
-		Calendar cal = getGregorian();
+		Calendar cal = getCalendar();
 		return cal.get(Calendar.DAY_OF_WEEK);
 	}
 	
 	/**
 	 * Converts a day of week index to a string so 2 = "Tuesday"
-	 * @return String
+	 * @return String: returns "-1" if index is not equal to a case
 	 */
 	public String getDayOfWeek() {
 		switch (getDayOfWeekIndex()) {
@@ -110,7 +110,7 @@ public class MyDate implements Serializable
 	 * returns a calendar with the date of this object this object can calculate Week, and day indexes
 	 * @return Calendar 
 	 */
-	public Calendar getGregorian() {
+	private Calendar getCalendar() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		Date date;
 		try
@@ -132,7 +132,7 @@ public class MyDate implements Serializable
 	 * @return int
 	 */
 	public int getWeek() {
-		Calendar cal = getGregorian();
+		Calendar cal = getCalendar();
 		return cal.get(Calendar.WEEK_OF_YEAR);
 	}
 	
