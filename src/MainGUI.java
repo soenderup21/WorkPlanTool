@@ -48,9 +48,9 @@ public class MainGUI extends JFrame
    private JPanel schedulePanel;
    
    
-   public MainGUI()
+   public MainGUI(String title)
    {
-      super("Work Plan Tool v1.0");
+      super(title);
       //added colors so its easier to see stuff, remove later
       listen=new Listener();
       
@@ -139,8 +139,4 @@ public class MainGUI extends JFrame
       }
    }
    
-   public static void main(String[] args)
-   {
-      MainGUI mg=new MainGUI();
-   }
 }

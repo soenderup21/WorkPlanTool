@@ -99,7 +99,6 @@ public class AnalysisTab extends JPanel
 				catch (Exception e2)
 				{
 					System.out.println("value not selected: " + e2);
-				
 				}
 				
 			}

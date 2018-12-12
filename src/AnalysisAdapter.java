@@ -22,7 +22,7 @@ public class AnalysisAdapter
    }
    
    /**
-    * This method is used to read the file and create a AnalysisList object from gathered information
+    * This method is used to read the file and create a NoteList object from gathered information
     * @return The method returns NoteList object
     */
    public AnalysisList getAllAnalysis()
