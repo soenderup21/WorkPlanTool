@@ -88,19 +88,19 @@ public class MyDate implements Serializable
 	 */
 	public String getDayOfWeek() {
 		switch (getDayOfWeekIndex()) {
-		case 1:
-			return "Monday";
 		case 2:
-			return "Tuesday";
+			return "Monday";
 		case 3:
-			return "Wednesday";
+			return "Tuesday";
 		case 4:
-			return "Thursday";
+			return "Wednesday";
 		case 5:
-			return "Friday";
+			return "Thursday";
 		case 6:
-			return "Saturday";
+			return "Friday";
 		case 7:
+			return "Saturday";
+		case 1:
 			return "Sunday";
 		}
 		return "-1";
