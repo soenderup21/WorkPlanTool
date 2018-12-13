@@ -82,6 +82,46 @@ public class MyDate implements Serializable
 		return cal.get(Calendar.DAY_OF_WEEK);
 	}
 	
+	public static MyDate getMondayOfWeek(int week) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.WEEK_OF_YEAR, week);
+		cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		return new MyDate(cal.get(GregorianCalendar.DATE),cal.get(GregorianCalendar.MONTH)+1
+		      ,cal.get(GregorianCalendar.YEAR));
+	}
+	
+	/**
+	 * assuming that the MyDate class is set at a Monday, based on an integer you can get the date of tuesday wednesday etc. 1 = Tuesday
+	 * @param daysAfter are days after monday
+	 * @return mydate of specifications
+	 */
+	public MyDate getDayOfWeek(int daysAfter) {
+		Calendar cal = getCalendar();
+		switch (daysAfter)
+		{
+			case 1:
+				cal.set(Calendar.DAY_OF_WEEK,Calendar.TUESDAY);		
+				break;
+			case 2:
+				cal.set(Calendar.DAY_OF_WEEK,Calendar.WEDNESDAY);		
+				break;
+			case 3:
+				cal.set(Calendar.DAY_OF_WEEK,Calendar.THURSDAY);		
+				break;
+			case 4:
+				cal.set(Calendar.DAY_OF_WEEK,Calendar.FRIDAY);		
+				break;
+			case 5:
+				cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);		
+				break;
+			case 6:
+				cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);		
+				break;
+		}
+		return new MyDate(cal.get(GregorianCalendar.DATE),cal.get(GregorianCalendar.MONTH)+1
+		      ,cal.get(GregorianCalendar.YEAR));
+	}
+	
 	/**
 	 * Converts a day of week index to a string so 2 = "Tuesday"
 	 * @return String: returns "-1" if index is not equal to a case
@@ -209,8 +249,23 @@ public class MyDate implements Serializable
 	 * @return returns a string that describes the date in written form
 	 */
 	public String toString() {
-		return "" + year + month + day;
-	}
-	
-	
+		String Month;
+		String Day;
+		if (month < 10)
+		{
+			Month = "0" + month;
+		}
+		else {
+			Month = "" + month;
+		}
+		if (day < 10)
+		{
+			Day = "0" + day;
+		}
+		else {
+			Day = "" +day;
+		}
+			
+		return "" + year + Month + Day;
+	}	
 }
