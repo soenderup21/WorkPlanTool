@@ -145,8 +145,8 @@ public class Note implements Serializable
    {
       String s="";
       if(general)
-         s=name+": "+note+"(general)";
-      else s=name+": "+note+"("+date+")";
+         s=name+" ("+date.getWeek()+")";
+      else s=name+" ("+date.toStringForCalendar()+")";
       return s;
    }
 }

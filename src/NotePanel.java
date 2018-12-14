@@ -112,7 +112,8 @@ public class NotePanel extends JPanel
    public void saveNote(MyDate date)
    {
       if(nameField.getText()=="" || noteArea.getText()=="")
-         System.out.println("How to write the error?");
+         JOptionPane.showMessageDialog(getParent(), "Wrong input",
+               "Error", JOptionPane.ERROR_MESSAGE);
       Note newNote=new Note(nameField.getText(), noteArea.getText(),date);
       if(getGeneral()) newNote.toGeneral();
       NoteList nl=adapter.getAllNotes();
