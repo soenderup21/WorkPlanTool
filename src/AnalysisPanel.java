@@ -10,42 +10,60 @@ import javax.swing.JPanel;
 public class AnalysisPanel extends JPanel
 {
    private EmployeeFileAdapter adapter;
+   private AnalysisAdapter aAdapter;
    
    private EmployeeList list;
    private Employee employee;
+   private AnalysisList allAnalysis;
    private ArrayList<Analysis> eanalysis;
    private ArrayList<JCheckBox> cbanalysis;
    
    public AnalysisPanel()
    {
       super();
+      
+      aAdapter=new AnalysisAdapter("analysis.bin");
+      allAnalysis=aAdapter.getAllAnalysis();
+      
       adapter=new EmployeeFileAdapter();
       list=(EmployeeList)adapter.getEmployeeList();
       cbanalysis=new ArrayList<JCheckBox>();
       
-      setEmployee(0);
+      getAllAnalysis();
       setCheckBoxes();
       
-      setMinimumSize(new Dimension(100, 100));
+      setMinimumSize(new Dimension(300, 300));
+      
+      
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
    }
    
    
-   public void setEmployee(int i)
+   public void setEmployee(int n)
    {
-      employee=list.get(i);
+      employee=list.get(n);
       eanalysis=employee.getAllAnalyses();
-      cbanalysis=new ArrayList<JCheckBox>();
+      cbanalysis.clear();
+      
+      for(int i=0;i<eanalysis.size();i++)
+         cbanalysis.add(new JCheckBox(eanalysis.get(i).getName()));
+      
+      setCheckBoxes();
    }
    
+   public void getAllAnalysis()
+   {
+      cbanalysis.clear();
+      for(int i=0;i<allAnalysis.size();i++)
+      {
+         cbanalysis.add(new JCheckBox(allAnalysis.getAnalysis(i).getName()));
+      }
+   }
    
    public void setCheckBoxes()
    {
-      for(int i=0;i<eanalysis.size();i++)
-      {
-         cbanalysis.add(new JCheckBox(eanalysis.get(i).getName()));
+      for(int i=0;i<cbanalysis.size();i++)
          add(cbanalysis.get(i));
-      }
    }
    
    public String[] getAllPickedString()
@@ -54,6 +72,10 @@ public class AnalysisPanel extends JPanel
       for(int i=0;i<cbanalysis.size();i++)
          if(cbanalysis.get(i).isSelected()) s.add(cbanalysis.get(i).getText());
       String[] fin=new String[s.size()];
+      
+      for(int i=0;i<cbanalysis.size();i++)
+         cbanalysis.get(i).setSelected(false);
+      
       return s.toArray(fin);
    }
    

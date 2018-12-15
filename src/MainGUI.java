@@ -30,7 +30,7 @@ public class MainGUI extends JFrame
    
    private JPanel employeeTab;
    private NoteTab noteTab;
-   private JPanel analysisTab;
+   private AnalysisTab analysisTab;
    private ScheduleTable schedulePanel;
    
    public MainGUI()
@@ -39,7 +39,7 @@ public class MainGUI extends JFrame
 
       tabListen = new TabListener();
       
-      analysisTab=new JPanel();
+      analysisTab=new AnalysisTab();
       employeeTab=new JPanel();
       noteTab=new NoteTab();
       schedulePanel=new ScheduleTable();
@@ -81,7 +81,7 @@ public class MainGUI extends JFrame
  
          if(((JTabbedPane)e.getSource()).getSelectedIndex()==3)
          {
-            //fill this out
+            analysisTab.updateAnalysisList();
          }
       }
    }

@@ -1,5 +1,5 @@
 import java.awt.Color;
-import java.awt.color.*;
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -7,11 +7,10 @@ import java.util.Random;
  * @author Draluca
  *Contains the names of the analyses the company has to do
  */
-public class Analysis
+public class Analysis implements Serializable
 {
    private String name;
-   private Color color;
-   
+   private Color color;  
    
    /**
     * Contructor for Analysis
@@ -21,7 +20,7 @@ public class Analysis
    {
    	Random rnd = new Random();
       this.name = name;
-      this.color = new Color(rnd.nextInt(255-100)+100,rnd.nextInt(255-100)+100,rnd.nextInt(255-100)+100);
+      this.color = new Color(rnd.nextInt(255),rnd.nextInt(255),rnd.nextInt(255));
    }
    
    /**

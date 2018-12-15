@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -147,6 +148,7 @@ public class NoteTab extends JPanel
       gridbag.setConstraints(this, c);
       setLayout(gridbag);
       add(mainPanel);
+      setBorder(BorderFactory.createMatteBorder(0, 0, 10, 0, new Color(81, 112, 160)));
       setVisible(true);
       
    }
@@ -470,7 +472,7 @@ public class NoteTab extends JPanel
                
                noteP.setEnabled(true);
                updateNotesList(false);
-               generalButton.setSelected(false);
+               allNotesButton.setSelected(true);
                editNoteButton.setText("Save");
                noteList.clearSelection();
             }
