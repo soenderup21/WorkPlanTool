@@ -80,7 +80,7 @@ public class Employee implements Serializable
       {
          if(analyses.get(i).getAnalysis().equals(analysis))
          {
-            analyses.get(i).setPreference();
+            analyses.get(i).setPreference(true);
             break;
          }
       }
@@ -92,10 +92,47 @@ public class Employee implements Serializable
       {
          if(analyses.get(i).getAnalysis().equals(analysis))
          {
-            analyses.get(i).setPreference();
+            analyses.get(i).setPreference(false);
             break;
          }
       }
+   }
+   
+   public void removeAnalysis(String analysis)
+   {
+      int n = -1;
+      for(int i = 0; i < analyses.size(); ++i)
+      {
+         if(analyses.get(i).getAnalysis().toString().equals(analysis))
+            n = i;
+      }
+      analyses.remove(n);
+   }
+   
+   public void removeAnalysis(int index)
+   {
+      analyses.remove(index);
+   }
+   
+   public boolean equals(Object obj)
+   {
+      if(!(obj instanceof Employee))
+      {
+         return false;
+      }
+      Employee other = (Employee) obj;
+      if(!(other.name.equals(name) || other.initials.equals(initials)))
+      {
+         return false;
+      }
+      for(int i = 0; i < analyses.size(); ++i)
+      {
+         if(!analyses.get(i).equals(other.analyses.get(i)))
+         {
+            return false;
+         }
+      }
+      return true;
    }
    public void sortAnalysisByPreference()
    {
@@ -156,5 +193,10 @@ public class Employee implements Serializable
       }
       else str += "No notes";
       return str;
+   }
+   
+   public AnalysisDetails getAnalysis(int i)
+   {
+      return analyses.get(i);
    }
 }

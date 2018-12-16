@@ -1,9 +1,11 @@
+import java.io.Serializable;
+
 /**
  * 
  * @author Draluca
  * Holds the details about each employee's ability to perform an analysis
  */
-public class AnalysisDetails
+public class AnalysisDetails implements Serializable
 {
    private Analysis analysis;
    private boolean trained;
@@ -61,6 +63,15 @@ public class AnalysisDetails
    }
    
    /**
+    * When an employee is assigned for an analysis, the lastPerformed date is changed to the current 
+    * date
+    */
+   
+   public void performed()
+   {
+      lastPerformed = MyDate.getCurrentDate();
+   }
+   /**
     * 
     * @param date is the date the employee has last performed the analysis
     * lastDate gets the value in date
@@ -81,28 +92,12 @@ public class AnalysisDetails
    }
    
    /**
-    * the analysis is set as prefered
+    * @param b is a boolean that specifies if the analysis is a preference or not
+    * the analysis is set as prefered or not prefered, depending on the value of the parameter
     */
-   public void setPreference()
+   public void setPreference(boolean b)
    {
-      preference = true;
-   }
-   
-   /**
-    * the analysis is set as not prefered
-    */
-   public void notPrefered()
-   {
-      preference = false;
-   }
-   
-   /**
-    * 
-    * @return the preference
-    */
-   public boolean getPreference()
-   {
-      return preference;
+      preference = b;
    }
    
    /**
@@ -124,6 +119,15 @@ public class AnalysisDetails
                trained = false;
          }
       }
+   }
+   
+   public boolean equals(Object obj)
+   {
+      if(!(obj instanceof AnalysisDetails))
+         return false;
+      AnalysisDetails other = (AnalysisDetails) obj;
+      return other.preference == preference && other.trained == trained && 
+            other.analysis.equals(analysis) && other.lastPerformed.equals(lastPerformed);
    }
    
 }

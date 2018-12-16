@@ -1,6 +1,4 @@
-import java.awt.Color;
 import java.io.Serializable;
-import java.util.Random;
 
 /**
  * 
@@ -10,34 +8,15 @@ import java.util.Random;
 public class Analysis implements Serializable
 {
    private String name;
-   private Color color;  
    
    /**
-    * Contructor for Analysis
+    * 
     * @param name sets the name of the analysis
     */
    public Analysis(String name)
    {
-   	Random rnd = new Random();
       this.name = name;
-      this.color = new Color(rnd.nextInt(255),rnd.nextInt(255),rnd.nextInt(255));
    }
-   
-   /**
-    * gets color of analysis
-    * @return color of type Color in java.util.Color
-    */
-   public Color getColor() {
-   	return this.color;
-   }
-   /**
-    * sets the Color of the variable color   
-    * @param color
-    */
-   public void setColor(Color color) {
-   	this.color = color;
-   }
-   
    
    /**
     * 

@@ -37,7 +37,7 @@ public class EmployeeFileAdapter
       }
    }
    
-  /* public static void main(String[] args)
+  public static void main(String[] args)
    {
       EmployeeFileAdapter adapter = new EmployeeFileAdapter();
       Employee e1=new Employee("Karla Jajic","JK");
@@ -52,5 +52,5 @@ public class EmployeeFileAdapter
       EmployeeList l=adapter.getEmployeeList();
       for(int i=0;i<l.size();i++)
          System.out.println(l.get(i).getIntials());
-   }*/
+   }
 }

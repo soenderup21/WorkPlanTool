@@ -97,4 +97,43 @@ public class AnalysisAdapter {
                System.out.println("IO Error writing to file");
             }
       }
+      
+      public static void main(String[] args)
+      {
+         Analysis a1 = new Analysis("meat");
+         Analysis a2 = new Analysis("milk");
+         Analysis a3 = new Analysis("corn");
+         Analysis a4 = new Analysis("seeds");
+         Analysis a5 = new Analysis("oat");
+         Analysis a6 = new Analysis("food");
+         Analysis a7 = new Analysis("feed");
+         Analysis a8 = new Analysis("cereals");
+         Analysis a9 = new Analysis("cereals2");
+         Analysis a10 = new Analysis("cereals3");
+         Analysis a11 = new Analysis("cereals4");
+         Analysis a12 = new Analysis("cereals5");
+         Analysis a13 = new Analysis("cereals6");
+         Analysis a14 = new Analysis("cereals7");
+         Analysis a15 = new Analysis("bla");
+         
+         AnalysisList analysisList = new AnalysisList();
+         analysisList.addAnalysis(a1);
+         analysisList.addAnalysis(a2);
+         analysisList.addAnalysis(a3);
+         analysisList.addAnalysis(a4);
+         analysisList.addAnalysis(a5);
+         analysisList.addAnalysis(a6);
+         analysisList.addAnalysis(a7);
+         analysisList.addAnalysis(a8);
+         analysisList.addAnalysis(a9);
+         analysisList.addAnalysis(a10);
+         analysisList.addAnalysis(a11);
+         analysisList.addAnalysis(a12);
+         analysisList.addAnalysis(a13);
+         analysisList.addAnalysis(a14);
+         analysisList.addAnalysis(a15);
+         
+         AnalysisAdapter analysisAdapter = new AnalysisAdapter("analysis.bin");
+         analysisAdapter.saveAnalyses(analysisList);
+      }
 }

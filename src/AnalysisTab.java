@@ -88,11 +88,11 @@ public class AnalysisTab extends JPanel
       deleteAnalysis.addActionListener(new TypeListener());
       
       employeeLabel = new JLabel("People who can perform selected analysis:");
-      employeeLabel.setPreferredSize(new Dimension(330, 50));
+      employeeLabel.setPreferredSize(new Dimension(150, 50));
       employeeLabel.setHorizontalAlignment(SwingConstants.CENTER);
       allEmployeesField = new JList<String>(listModel1);
       allEmployeesField.setVisibleRowCount(15); 
-      allEmployeesField.setPreferredSize(new Dimension(250, 1500));
+      allEmployeesField.setMinimumSize(new Dimension(150, 1500));
       allEmployeesScrollPane = new JScrollPane(allEmployeesField);
       allEmployeesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -179,15 +179,17 @@ public class AnalysisTab extends JPanel
       }
    }
    
-   public void getAllEmployeesForSelectedAnalysis() {
+   public void getAllEmployeesForSelectedAnalysis() 
+   {
       EmployeeList el = emAdapter.getEmployeeList();
       Analysis ann = (Analysis)(allAnalysisArea.getSelectedValue()); 
       for (int i = 0; i < el.size(); i++)
       {
-         ArrayList analOfEmployee = el.get(i).getAllAnalyses();
+         Employee e=el.get(i);
+         ArrayList analOfEmployee = e.getAllAnalyses();
             for(int j = 0; j < analOfEmployee.size(); j++) {
                if(analOfEmployee.contains(ann)) {
-                  listModel1.addElement(el.get(i).getName().toString());
+                  listModel1.addElement((String)e.getName());
                }
             }
       }
@@ -221,7 +223,7 @@ public class AnalysisTab extends JPanel
                         for(int j = 0; j < analOfEmployee.size(); j++) {
                            Analysis temp = analOfEmployee.get(j);
                            if(((Analysis)allAnalysisArea.getSelectedValue()).equals(temp)) {
-                              listModel1.addElement(singleEmployee.toString());
+                              listModel1.addElement(singleEmployee.getName());
                            }
                         }
                   }
@@ -231,7 +233,7 @@ public class AnalysisTab extends JPanel
                      EmployeeList emptyList = new EmployeeList();
                      emptyList.add(noEmployee);
                      emAdapter.saveEmployeeList(emptyList);
-                     listModel1.addElement(noEmployee.toString());
+                     listModel1.addElement(noEmployee.getName());
                      System.out.println(noEmployee);
                   }
       

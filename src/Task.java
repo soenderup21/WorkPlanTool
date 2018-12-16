@@ -31,9 +31,10 @@ public class Task implements Serializable
     * add employee to employees
     * @param employee
     */
-   public void addAnalysis(Analysis a) 
+   public void addAnalysisArray(ArrayList<Analysis> a) 
    {
-      analysis.add(a); 
+      for(int i=0;i<a.size();i++)
+         analysis.add(a.get(i));
    }
    
    /**

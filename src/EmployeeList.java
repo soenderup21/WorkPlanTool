@@ -100,19 +100,4 @@ public class EmployeeList implements Serializable
    {
       return employees;
    }
-   
-   
-   public static void main(String[] args)
-   {
-      EmployeeFileAdapter adapter=new EmployeeFileAdapter();
-      EmployeeList el=new EmployeeList();
-      el.add(new Employee("RP","Raluca petrovici"));
-      el.add(new Employee("AA","Aleksandra Aleksandrova"));
-      el.add(new Employee("CS","Christian SomethingDanish"));
-      el.add(new Employee("KJ","Karla Jajic"));
-      adapter.saveEmployeeList(el);
-      EmployeeList e=(EmployeeList) adapter.getEmployeeList();
-      for(int i=0;i<e.size();i++)
-         System.out.println(e.get(i).getIntials());
-   }
 }
