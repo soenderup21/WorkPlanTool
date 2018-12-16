@@ -85,6 +85,7 @@ public class NoteTab extends JPanel
       noteList.addListSelectionListener(listListen);
       noteList.setVisibleRowCount(18); 
       showNotesScrollPane= new JScrollPane(noteList);
+      showNotesScrollPane.setPreferredSize(new Dimension(250,300));
       showNotesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       showNotesPanel= new JPanel();
       showNotesPanel.setLayout(new BoxLayout(showNotesPanel, BoxLayout.Y_AXIS));

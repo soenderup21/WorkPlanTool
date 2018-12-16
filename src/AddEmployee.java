@@ -47,7 +47,6 @@ public class AddEmployee extends JFrame
    private DefaultListCellRenderer renderer2;
    
    private JButton removeAnalysis;
-   private JCheckBox prefered;
    
    private AnalysisAdapter analysisAdapter;
    private AnalysisList analyses;
@@ -144,11 +143,9 @@ public class AddEmployee extends JFrame
       
       removeAnalysis = new JButton("Remove");
       
-      prefered = new JCheckBox("prefered");
       
       containerPanel.add(analysesText);
       containerPanel.add(listsPanel);
-      containerPanel.add(prefered);
       containerPanel.add(removeAnalysis);
       
       containerPanel.setMaximumSize(new Dimension(500, 210));
@@ -183,9 +180,10 @@ public class AddEmployee extends JFrame
       public void actionPerformed(ActionEvent e)
       {
          employeeAdapter = new EmployeeFileAdapter();
-         employeeList = employeeAdapter.getEmployeeList();
          if(e.getSource() == save)
          {
+
+            employeeList = employeeAdapter.getEmployeeList();
             int i;
             int n = employeeList.size();
             if(name.getText().equals("") || initials.getText().equals(""))
@@ -209,11 +207,6 @@ public class AddEmployee extends JFrame
                      employeeList.get(n).addAnalysis(new Analysis(listModel2.get(j)));
                   }
                   employeeAdapter.saveEmployeeList(employeeList);
-                  employeeList = employeeAdapter.getEmployeeList();
-                  for(int j = 0; j < employeeList.size(); ++j)
-                  {
-                     System.out.println(employeeList.get(j).getIntials());
-                  }
                   dispose();
 //                  setVisible(false);
                }
@@ -222,6 +215,7 @@ public class AddEmployee extends JFrame
          }
          else if(e.getSource() == removeAnalysis)
          {
+            employeeList = employeeAdapter.getEmployeeList();
             if (!selectedAnalyses.isSelectionEmpty())
                listModel2.removeElementAt(selectedAnalyses.getSelectedIndex());
          }
@@ -254,8 +248,10 @@ public class AddEmployee extends JFrame
       }
    }
    
-   public static void main(String[] args)
-   {
-      AddEmployee ae = new AddEmployee();
-   }  
+  public static void main(String[] args)
+  {
+     AddEmployee ae = new AddEmployee();
+  }
+  
 }
+   

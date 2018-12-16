@@ -121,17 +121,18 @@ public class Employee implements Serializable
          return false;
       }
       Employee other = (Employee) obj;
-      if(!(other.name.equals(name) || other.initials.equals(initials)))
+      if(!(other.name.equals(name) && other.initials.equals(initials)))
       {
          return false;
       }
-      for(int i = 0; i < analyses.size(); ++i)
-      {
-         if(!analyses.get(i).equals(other.analyses.get(i)))
+      if(analyses.size() > 0 && other.analyses.size() > 0)
+         for(int i = 0; i < analyses.size(); ++i)
          {
-            return false;
+            if(!analyses.get(i).equals(other.analyses.get(i)))
+            {
+               return false;
+            }
          }
-      }
       return true;
    }
    public void sortAnalysisByPreference()

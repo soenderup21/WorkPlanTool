@@ -90,7 +90,7 @@ public class MainGUI extends JFrame
    {
       MainGUI mg= new MainGUI();
       
-      EmployeeFileAdapter adapter = new EmployeeFileAdapter();
+      /*EmployeeFileAdapter adapter = new EmployeeFileAdapter();
       Employee e1 = new Employee("Raluca Petrovici", "RPE");
       Employee e2 = new Employee("Karla Jajic", "KJ");
       Employee e3 = new Employee("Aleksandra Aleksandrova", "AAL");
@@ -202,7 +202,7 @@ public class MainGUI extends JFrame
       
       AnalysisAdapter analysisAdapter = new AnalysisAdapter("analysis.bin");
       analysisAdapter.saveAnalyses(analysisList);
-      adapter.saveEmployeeList(empList);
+      adapter.saveEmployeeList(empList);*/
    }
    
 }

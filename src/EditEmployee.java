@@ -1,8 +1,9 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
@@ -15,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
@@ -51,7 +53,9 @@ public class EditEmployee extends JFrame
    
    private JButton removeAnalysis;
    private JCheckBox prefered;
+   private JButton setTrained;
    private MyChangeListener changeListener;
+   private JPanel buttonsPanel;
    
    private AnalysisAdapter analysisAdapter;
    private AnalysisList analyses;
@@ -64,6 +68,12 @@ public class EditEmployee extends JFrame
    private JButton save;
    private MyButtonListener buttonListener;
    
+   private JPanel notePanel;
+   private JTextArea noteText;
+   private JTextField noteName;
+   private JScrollPane noteScrollPane;
+   
+   private MyListCellRenderer renderer3;
    
    public EditEmployee(int index)
    {
@@ -134,11 +144,18 @@ public class EditEmployee extends JFrame
       
       for(int i = 0; i < employeeList.get(index).getNumberOfAnalyses(); ++i)
       {
-         listModel2.addElement(employeeList.get(index).getAnalysis(i).getAnalysis().toString());
+         if(employeeList.get(index).getAnalysis(i).isTrained())
+            listModel2.addElement(employeeList.get(index).getAnalysis(i).getAnalysis().toString());
+         else 
+         {
+            listModel2.addElement(employeeList.get(index).getAnalysis(i).getAnalysis().toString());
+         }
       }
       
       selectedAnalyses = new JList<String>(listModel2);
       selectedAnalyses.addListSelectionListener(selectionListener);
+      renderer3 = new MyListCellRenderer();
+      selectedAnalyses.setCellRenderer(renderer3);
       
       selectedAnalysisListScrollPane = new JScrollPane(selectedAnalyses);
       selectedAnalysisListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -157,31 +174,67 @@ public class EditEmployee extends JFrame
       containerPanel = new JPanel();
       containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.Y_AXIS));
       
+      buttonListener = new MyButtonListener();
+      
       removeAnalysis = new JButton("Remove");
+      removeAnalysis.addActionListener(buttonListener);
+      removeAnalysis.setEnabled(false);
+      
+      setTrained = new JButton("Set trained");
+      setTrained.addActionListener(buttonListener);
+      setTrained.setEnabled(false);
       
       changeListener = new MyChangeListener();
       
       prefered = new JCheckBox("prefered");
+      prefered.setEnabled(false);
       prefered.addChangeListener(changeListener);
       
       containerPanel.add(analysesText);
       containerPanel.add(listsPanel);
-      containerPanel.add(prefered);
-      containerPanel.add(removeAnalysis);
       
-      containerPanel.setMaximumSize(new Dimension(500, 210));
-      containerPanel.setMinimumSize(new Dimension(500, 210));
+      buttonsPanel = new JPanel();
+      buttonsPanel.add(prefered);
+      buttonsPanel.add(setTrained);
+      buttonsPanel.add(removeAnalysis);
+      buttonsPanel.setMaximumSize(new Dimension(300, 40));
+      
+      containerPanel.add(buttonsPanel);
+      
+      containerPanel.setMaximumSize(new Dimension(500, 320));
+      containerPanel.setMinimumSize(new Dimension(500, 320));
       
       southPanel = new JPanel();
       
       save = new JButton("Save");
-      buttonListener = new MyButtonListener();
+      
       save.addActionListener(buttonListener);
       save.setPreferredSize(new Dimension(100,  30));
       southPanel.add(save);
       
-      removeAnalysis.addActionListener(buttonListener);
       
+      notePanel = new JPanel();
+      if(employeeList.get(index).getNote() == null)
+      {
+         noteName = new JTextField();
+         noteText = new JTextArea();
+      }
+      else {
+         noteName = new JTextField(employeeList.get(index).getNote().getName());
+         noteText = new JTextArea(employeeList.get(index).getNote().getNote());
+      }
+      noteText.setLineWrap(true);
+      noteName.setMaximumSize(new Dimension(150, 25));
+      noteName.setMinimumSize(new Dimension(150, 25));
+      noteScrollPane = new JScrollPane(noteText);
+      noteScrollPane.setPreferredSize(new Dimension(300, 110));
+      notePanel.setMaximumSize(new Dimension(400, 150));
+      notePanel.setMinimumSize(new Dimension(400, 150));
+      notePanel.setLayout(new BoxLayout(notePanel, BoxLayout.Y_AXIS));
+      notePanel.add(noteName);
+      notePanel.add(noteScrollPane);
+      
+      containerPanel.add(notePanel);
       
       add(enteringDataPanel, BorderLayout.NORTH);
       add(containerPanel, BorderLayout.CENTER);
@@ -189,11 +242,36 @@ public class EditEmployee extends JFrame
       
       
       setResizable(false);
-      setSize(700, 500);
+      setSize(700, 600);
       setVisible(true);
       setLocationRelativeTo(null);
       setDefaultCloseOperation(DISPOSE_ON_CLOSE);
       
+   }
+   
+   private class MyListCellRenderer extends DefaultListCellRenderer
+   {
+      public Component getListCellRendererComponent(JList<?> list,
+            Object value,
+            int ind,
+            boolean isSelected,
+            boolean cellHasFocus)
+      {
+         super.getListCellRendererComponent( list, value, ind,
+               isSelected, cellHasFocus );
+         employeeList = employeeAdapter.getEmployeeList();
+        // String analysisName = (String) value;
+         if(!employeeList.get(index).getAnalysis(ind).isTrained())
+         {
+            setBackground(new Color(255, 63, 0));
+            setForeground(new Color(255, 255, 255));
+         }
+         if(employeeList.get(index).getAnalysis(ind).isPreference())
+         {
+            setBackground(new Color(84, 255, 0));
+         }
+         return this;
+      }
    }
    
    private class MyButtonListener implements ActionListener
@@ -225,18 +303,10 @@ public class EditEmployee extends JFrame
                   employeeList.get(index).setName(name.getText());
                   
                   employeeList.get(index).sortAnalysisByPreference();
+                  employeeList.get(index).setNote(new Note(noteName.getText(), noteText.getText(), null));
+                  
                   employeeAdapter.saveEmployeeList(employeeList);
-//                  employeeList = employeeAdapter.getEmployeeList();
-//                  for(int j = 0; j < employeeList.size(); ++j)
-//                  {
-//                     System.out.println(employeeList.get(j).getIntials());
-//                  }
-                  for(int j = 0; j < employeeList.get(index).getNumberOfAnalyses(); ++j)
-                  {
-                     System.out.println(employeeList.get(index).getAnalysis(j).getAnalysis());
-                  }
                   dispose();
-//                  setVisible(false);
                }
             }
             
@@ -246,10 +316,17 @@ public class EditEmployee extends JFrame
             if (!selectedAnalyses.isSelectionEmpty())
             {               
                employeeList = employeeAdapter.getEmployeeList();
-               employeeList.get(index).removeAnalysis(selectedAnalyses.getSelectedIndex());
-               listModel2.removeElementAt(selectedAnalyses.getSelectedIndex());
+               String str = employeeList.get(index).getAnalysis(selectedAnalyses.getSelectedIndex()).getAnalysis().toString();
+               employeeList.get(index).removeAnalysis(str);
                employeeAdapter.saveEmployeeList(employeeList);
+               listModel2.removeElementAt(selectedAnalyses.getSelectedIndex());
             }
+         }
+         else if(e.getSource() == setTrained)
+         {
+            employeeList = employeeAdapter.getEmployeeList();
+            employeeList.get(index).getAnalysis(selectedAnalyses.getSelectedIndex()).setTrained();
+            employeeAdapter.saveEmployeeList(employeeList);
          }
       }
    }
@@ -287,14 +364,19 @@ public class EditEmployee extends JFrame
          {
             if (!selectedAnalyses.isSelectionEmpty())
             {
+               removeAnalysis.setEnabled(true);
+              // prefered.setEnabled(true);
+               setTrained.setEnabled(true);
                employeeList = employeeAdapter.getEmployeeList();
                if(employeeList.get(index).getAnalysis(selectedAnalyses.getSelectedIndex()).isPreference())
                {
                   prefered.setSelected(true);
+                  prefered.setEnabled(true);
 //                  employeeAdapter.saveEmployeeList(employeeList);
                }
                else
                   prefered.setSelected(false);
+               prefered.setEnabled(true);
 //                  employeeAdapter.saveEmployeeList(employeeList);
             }
          }

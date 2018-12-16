@@ -75,6 +75,7 @@ public class AnalysisTab extends JPanel
       allAnalysisArea.setPreferredSize(new Dimension(250, 1500));
       
       allAnalysisScrollPane = new JScrollPane(allAnalysisArea);
+      allAnalysisScrollPane.setPreferredSize(new Dimension(280, 280));
       allAnalysisScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       
       addAnalysisLabel = new JLabel("Add analysis:");
@@ -88,12 +89,13 @@ public class AnalysisTab extends JPanel
       deleteAnalysis.addActionListener(new TypeListener());
       
       employeeLabel = new JLabel("People who can perform selected analysis:");
-      employeeLabel.setPreferredSize(new Dimension(150, 50));
+      employeeLabel.setPreferredSize(new Dimension(150, 40));
       employeeLabel.setHorizontalAlignment(SwingConstants.CENTER);
       allEmployeesField = new JList<String>(listModel1);
       allEmployeesField.setVisibleRowCount(15); 
-      allEmployeesField.setMinimumSize(new Dimension(150, 1500));
+      allEmployeesField.setMinimumSize(new Dimension(400, 1500));
       allEmployeesScrollPane = new JScrollPane(allEmployeesField);
+      allEmployeesScrollPane.setPreferredSize(new Dimension(280, 280));
       allEmployeesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
       leftPanel = new JPanel();
@@ -113,6 +115,7 @@ public class AnalysisTab extends JPanel
       anPanel.add(leftPanel);
       anPanel.add(rightPanel);
       
+      //centering panels 
       GridBagLayout gridbag = new GridBagLayout();
       GridBagConstraints c = new GridBagConstraints();
       
@@ -129,16 +132,27 @@ public class AnalysisTab extends JPanel
       {
          if(e.getSource() == addAnalysis)
          {
-            if(addAnalysisField.getText().equals("")) {
+            if(addAnalysisField.getText().equals("")) 
+            {
                String st = "Write the name of the analysis!";
                JOptionPane.showMessageDialog(null, st);
-            }else {
+            }
+            else 
+            {
             String analysisName = addAnalysisField.getText();
             Analysis newAnalysis = new Analysis(analysisName);
-            adapter.saveAnalysis(newAnalysis);
+            AnalysisList al=adapter.getAllAnalysis();
+           
+            al.addAnalysis(newAnalysis);
+            adapter.saveAnalyses(al);
+            
+            AnalysisList a=adapter.getAllAnalysis();
+            for(int i=0;i<a.size();i++)
+               System.out.println(a.getAnalysis(i).getName());
+            
             updateAnalysisList();
-            addAnalysisField.setText("");
             }
+            
             listModel1.clear();
             addAnalysisField.setText("");
          }
@@ -154,9 +168,14 @@ public class AnalysisTab extends JPanel
                   if(allAnalysisArea.isSelectionEmpty() == true) {
                      String st = "Select an analysis first!";
                      JOptionPane.showMessageDialog(null, st);
-                  }else {
+                  }else
+                  {
                   
-                     adapter.deleteAnalysis((Analysis)allAnalysisArea.getSelectedValue());
+                     AnalysisList al=adapter.getAllAnalysis();
+                     for(int i=0;i<al.size();i++)
+                        if(allAnalysisArea.getSelectedIndex()==i) al.removeAnalysis(i);
+                     
+                     adapter.saveAnalyses(al);
                         updateAnalysisList();
                   }
                }
@@ -169,9 +188,7 @@ public class AnalysisTab extends JPanel
 
    public void updateAnalysisList()
    {
-      
       listModel.clear();
-      
       AnalysisList al = adapter.getAllAnalysis();
       for(int i = 0; i<al.size(); i++)
       {
@@ -212,33 +229,38 @@ public class AnalysisTab extends JPanel
    
       
    private class EmployeeSelectionListener implements ListSelectionListener{
-   public void valueChanged(ListSelectionEvent e) {
-      if(e.getSource() == allAnalysisArea) {
+   public void valueChanged(ListSelectionEvent e) 
+   {
+      if(e.getSource() == allAnalysisArea)
+      {
          listModel1.clear();
                EmployeeList emplList = emAdapter.getEmployeeList();
-               if(emplList != null) {
-                  for(int i = 0; i < emplList.size(); i++) {
+               if(!emplList.equals(null))
+               {
+                  for(int i = 0; i < emplList.size(); i++)
+                  {
                      Employee singleEmployee = emplList.get(i);
                      ArrayList<Analysis> analOfEmployee = singleEmployee.getAllAnalyses();
-                        for(int j = 0; j < analOfEmployee.size(); j++) {
+                        for(int j = 0; j < analOfEmployee.size(); j++)
+                        {
                            Analysis temp = analOfEmployee.get(j);
-                           if(((Analysis)allAnalysisArea.getSelectedValue()).equals(temp)) {
+                           if(temp.equals((Analysis)allAnalysisArea.getSelectedValue()))
                               listModel1.addElement(singleEmployee.getName());
-                           }
                         }
+                        if(listModel1.getSize()==0) listModel1.addElement("No employee is trained");
                   }
-                  }
-                  else{
-                     Employee noEmployee = new Employee("No employee can perform this kind of Analysis", ".");
-                     EmployeeList emptyList = new EmployeeList();
-                     emptyList.add(noEmployee);
-                     emAdapter.saveEmployeeList(emptyList);
-                     listModel1.addElement(noEmployee.getName());
-                     System.out.println(noEmployee);
-                  }
+                }
       
    }
    }
+   }
+   
+   public static void main(String[] args)
+   {
+      AnalysisAdapter adapter= new AnalysisAdapter("analysis.bin");
+      AnalysisList a=adapter.getAllAnalysis();
+      for(int i=0;i<a.size();i++)
+         System.out.println(a.getAnalysis(i).getName());
    }
 
 }

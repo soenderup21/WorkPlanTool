@@ -246,23 +246,22 @@ public class MyDate implements Serializable
    }
 
    /**
-    * returns a boolean that returns true if the inputted date is later than the
-    * date of the object itself
-    * 
+    * returns a boolean that returns true if the inputed date is later than the date of the object itself
     * @param isLater
     * @return returns a boolean indicator
     */
-   public boolean isLater(MyDate isLater)
-   {
-      if (this.year < isLater.year)
+   public boolean isLater(MyDate isLater) {
+      if (this.year > isLater.year)
       {
          return true;
       }
-      else if (this.month < isLater.month)
+      if(this.year < isLater.year) return false;
+      if (this.month > isLater.month)
       {
          return true;
       }
-      else if (this.day < isLater.day)
+      if(this.month < isLater.month) return false;
+      if (this.day >= isLater.day)
       {
          return true;
       }

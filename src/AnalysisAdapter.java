@@ -98,7 +98,7 @@ public class AnalysisAdapter {
             }
       }
       
-      public static void main(String[] args)
+    /*  public static void main(String[] args)
       {
          Analysis a1 = new Analysis("meat");
          Analysis a2 = new Analysis("milk");
@@ -135,5 +135,5 @@ public class AnalysisAdapter {
          
          AnalysisAdapter analysisAdapter = new AnalysisAdapter("analysis.bin");
          analysisAdapter.saveAnalyses(analysisList);
-      }
+      }*/
 }

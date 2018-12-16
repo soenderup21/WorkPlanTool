@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -54,6 +56,8 @@ public class EmployeeGUI extends JPanel
    private JTable employeesTable;
    private JScrollPane employeesScrollPane;
    private ListSelectionModel listSelectionModel;
+   
+   private JPanel emptyPanel;
 
    private JPanel employeeDataPanel;
    private JPanel header;
@@ -78,6 +82,7 @@ public class EmployeeGUI extends JPanel
    
    private MyButtonListener click;
    
+   private MyListCellRenderer renderer;
    
    public EmployeeGUI()
    {
@@ -141,6 +146,7 @@ public class EmployeeGUI extends JPanel
       
       
       
+      
       EmployeeList employees = adapter.getEmployeeList();
       Object[][] data = new Object[employees.size()][2];
       for(int i = 0; i < employees.size(); ++i)
@@ -160,7 +166,7 @@ public class EmployeeGUI extends JPanel
       employeesScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       
       employeeDataPanel = new JPanel();
-      employeeDataPanel.setPreferredSize(new Dimension(350, 400));
+      employeeDataPanel.setPreferredSize(new Dimension(350, 470));
       employeeDataPanel.setBackground(new Color(255, 255, 255));
       employeeDataPanel.setLayout(new BoxLayout(employeeDataPanel, BoxLayout.Y_AXIS));
       
@@ -180,25 +186,33 @@ public class EmployeeGUI extends JPanel
       analysisScrollPane = new JScrollPane(analysesList);
       analysisScrollPane.setPreferredSize(new Dimension(350, 180));
       analysesDetails = new JPanel();
-      analysesDetails.setPreferredSize(new Dimension(350, 200));
+      analysesDetails.setPreferredSize(new Dimension(350, 220));
       analysesDetails.setBackground(new Color(255, 255, 255));
       analysesDetails.add(analysesText);
       analysesDetails.add(analysisScrollPane);
 
       analysisScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       
+      renderer = new MyListCellRenderer();
+      renderer.setHorizontalAlignment(JLabel.CENTER);
+      analysesList.setCellRenderer(renderer);
+      
       noteHeader = new JLabel();
+      noteHeader.setPreferredSize(new Dimension(350, 25));
       noteText = new JTextArea();
-      noteText.setMaximumSize(new Dimension(340, 60));
+//      noteText.setMinimumSize(new Dimension(340, 60));
+//      noteText.setMaximumSize(new Dimension(340, 60));
       noteText.setLineWrap(true);
       notePanel = new JPanel();
-      notePanel.add(noteHeader);
-      notePanel.add(noteText);
+      
       notePanel.setBackground(new Color(255, 255, 255));
-      notePanel.setPreferredSize(new Dimension(350, 100));
+      notePanel.setPreferredSize(new Dimension(350, 26));
       noteScrollPane = new JScrollPane(noteText);
+//      noteScrollPane.setMaximumSize(new Dimension(350, 90));
+      noteScrollPane.setPreferredSize(new Dimension(350, 150));
       noteScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//      noteScrollPane.setBorder(new Border());
+      notePanel.add(noteHeader);
+      //notePanel.add(noteScrollPane);
       
       removeEmployee = new JButton("Delete employee");
       removeEmployee.addActionListener(click);
@@ -218,10 +232,15 @@ public class EmployeeGUI extends JPanel
       
       employeeDataPanel.add(header);
       employeeDataPanel.add(analysesDetails);
+      employeeDataPanel.add(notePanel);
       employeeDataPanel.add(noteScrollPane);
       employeeDataPanel.add(buttonsPanel);
       
+      emptyPanel = new JPanel();
+      emptyPanel.setPreferredSize(new Dimension(500, 70));
+      
       mainContentPanel.setPreferredSize(new Dimension(500, 900));
+      mainContentPanel.add(emptyPanel);
       mainContentPanel.add(employeeDataPanel);
       mainContentPanel.add(addEmployee);
       
@@ -245,10 +264,10 @@ public class EmployeeGUI extends JPanel
       addEmployeeButton.addActionListener(click);
      
       setLayout(new BorderLayout());
-      setBorder(BorderFactory.createMatteBorder(0, 0, 10, 0, new Color(81, 112, 160)));
       
       add(leftPart, BorderLayout.WEST);
       add(mainContentPanel, BorderLayout.EAST);
+      setBorder(BorderFactory.createMatteBorder(0, 0, 10, 0, new Color(81, 112, 160)));
    }
 
    private class MyButtonListener implements ActionListener
@@ -408,29 +427,35 @@ public class EmployeeGUI extends JPanel
                      employeesTable.getColumnModel().getColumn(0).setPreferredWidth(100);
                      employeesTable.getColumnModel().getColumn(1).setPreferredWidth(300);
                      
+                     headerText.setText(employees.get(employees.size()-1).getName() + "(" +
+                           employees.get(employees.size()-1).getIntials() + ")");
                   
+                     listModel.clear();
+                     for(int i = 0; i < employees.get(employees.size()-1).getNumberOfAnalyses(); ++i)
+                     {
+                           listModel.addElement(employees.get(employees.size()-1).getAnalysis(i).getAnalysis().toString());
+                     }
+                     if(employees.get(employees.size()-1).getNote() != null)
+                     {
+                        noteText.setText(employees.get(employees.size()-1).getNote().getNote());
+                        noteHeader.setText(employees.get(employees.size()-1).getNote().getName());
+                     }
+                     else 
+                     {
+                        noteHeader.setText("No notes");
+                        noteText.setText("");
+                     }
+                        
                }
             });
-//            updateTable();
-//            EmployeeList employees = adapter.getEmployeeList();
-//            
-//            Object[][] data = new Object[employees.size()][2];
-//            for(int i = 0; i < employees.size(); ++i)
-//            {
-//               data[i][0] = employees.get(i).getIntials();
-//               data[i][1] = employees.get(i).getName();
-//            }
-//            dtm = new DefaultTableModel(data, columnNames);
-//            
-//            employeesTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-//            employeesTable.getColumnModel().getColumn(1).setPreferredWidth(300);
-//            employeesTable.setModel(dtm);
-//            System.out.println(employees.size());
          }
          else if(e.getSource() == editEmployee)
          {
+            EmployeeList employees = adapter.getEmployeeList();
             int index = employeesTable.getSelectedRow();
-            EditEmployee ee = new EditEmployee(employeesTable.getSelectedRow());
+            String initials = (String) dtm.getValueAt(index, 0);
+            Employee found = employees.getEmployee(initials);
+            EditEmployee ee = new EditEmployee(employees.getIndexOfEmployee(found));
             ee.addWindowListener(new WindowAdapter()
             {
                public void windowClosed(WindowEvent e)
@@ -455,21 +480,27 @@ public class EmployeeGUI extends JPanel
                      {
                         if(!employees.get(index).getAnalysis(i).isTrained())
                         {
-                           String str = employees.get(index).getAnalysis(i).getAnalysis().toString() + " - needs retraining";
+                           String str = employees.get(index).getAnalysis(i).getAnalysis().toString();
                            listModel.addElement(str);
                         }
                         else if(employees.get(index).getAnalysis(i).isPreference())
                         {
-                           String str = employees.get(index).getAnalysis(i).getAnalysis().toString() + "- prefered";
+                           String str = employees.get(index).getAnalysis(i).getAnalysis().toString();
                            listModel.addElement(str);
                         }
                         else 
                            listModel.addElement(employees.get(index).getAnalysis(i).getAnalysis().toString());
                      }
                      if(employees.get(index).getNote() != null)
+                     {
                         noteText.setText(employees.get(index).getNote().getNote());
+                        noteHeader.setText(employees.get(index).getNote().getName());
+                     }
                      else 
-                        noteText.setText("No notes");
+                     {
+                        noteHeader.setText("No notes");
+                        noteText.setText("");
+                     }
                }
             });
          }
@@ -481,7 +512,6 @@ public class EmployeeGUI extends JPanel
       public void valueChanged(ListSelectionEvent e)
       {
          analysesText.setText("Analyses:");
-         noteHeader.setText("Notes: ");
          EmployeeList employees = adapter.getEmployeeList();
          int rowIndex = employeesTable.getSelectedRow();
          if(rowIndex >= 0) {
@@ -497,28 +527,63 @@ public class EmployeeGUI extends JPanel
             {
                if(!analyses.get(i).isTrained())
                {
-                  listModel.addElement(analyses.get(i).getAnalysis().toString() + " - needs retraining");
+                  listModel.addElement(analyses.get(i).getAnalysis().toString());
                }
                else if(analyses.get(i).isPreference())
                {
-                  listModel.addElement(analyses.get(i).getAnalysis().toString() + " - prefered");
+                  listModel.addElement(analyses.get(i).getAnalysis().toString());
                }
                else 
                   listModel.addElement(analyses.get(i).getAnalysis().toString());
             }
             if(found.getNote() != null)
+            {
                noteText.setText(found.getNote().getNote());
-            else 
-               noteText.setText("No notes");
-//            
+               noteHeader.setText(found.getNote().getName());
+            }
+               
+            else {
+               noteText.setText("");
+               noteHeader.setText("No notes");
+            }
+                         
          }
          else {
             removeEmployee.setEnabled(false);
             editEmployee.setEnabled(false);
          }
-         
-         
-         
       }
    }
+   private class MyListCellRenderer extends DefaultListCellRenderer
+   {
+      public Component getListCellRendererComponent(JList<?> list,
+            Object value,
+            int ind,
+            boolean isSelected,
+            boolean cellHasFocus)
+      {
+         super.getListCellRendererComponent( list, value, ind,
+               isSelected, cellHasFocus );
+         EmployeeList employeeList = adapter.getEmployeeList();
+         
+        // String analysisName = (String) value;
+         int k = employeesTable.getSelectedRow();
+         if(k >= 0)
+         {
+            String initials = (String) dtm.getValueAt(k, 0);
+            Employee found = employeeList.getEmployee(initials);
+            if(!found.getAnalysis(ind).isTrained())
+            {
+               setBackground(new Color(255, 63, 0));
+               setForeground(new Color(255, 255, 255));
+            }
+            if(found.getAnalysis(ind).isPreference())
+            {
+               setBackground(new Color(84, 255, 0));
+            }
+         }
+         return this;
+      }
+   }
+
 }

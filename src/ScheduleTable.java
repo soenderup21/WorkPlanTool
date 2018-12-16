@@ -175,6 +175,7 @@ public class ScheduleTable extends JPanel
       noteTabPane= new JTabbedPane();
       noteTabPane.addTab("Add", addNotePanel);
       noteTabPane.addTab("See", seeNotesPanel);
+      updateNotes(monday);
       
       analysisP=new JPanel();
       
@@ -343,8 +344,6 @@ public class ScheduleTable extends JPanel
       tasks.addTask(t);
       weeks.addTaskList(tasks);
       adapter.saveTasks(weeks);
-      
-      sidePanelEnabled(false);
    }
    
    
@@ -375,7 +374,9 @@ public class ScheduleTable extends JPanel
             if(choice==JOptionPane.YES_OPTION) 
             {
                String[] list= analysisPanel.getAllPickedString();
+               if(list.length!=0)
                setTableValue(list);
+               sidePanelEnabled(false);
             }
             else if(choice==JOptionPane.NO_OPTION)
             {

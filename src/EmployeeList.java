@@ -50,7 +50,7 @@ public class EmployeeList implements Serializable
     */
    public void removeEmployee(Employee emp)
    {
-      employees.remove(emp);
+         employees.remove(emp);
    }
    
    /**
@@ -99,5 +99,15 @@ public class EmployeeList implements Serializable
    public ArrayList<Employee> getAllEmployees()
    {
       return employees;
+   }
+   
+   public int getIndexOfEmployee(Employee emp)
+   {
+      for(int i = 0; i < employees.size(); ++i)
+      {
+         if(employees.get(i).equals(emp))
+            return i;
+      }
+      return -1;
    }
 }
