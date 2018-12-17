@@ -14,7 +14,7 @@ public class Week implements Serializable
    {
       if(isThereAWeek(tl.getWeek()))
          for(int i=0;i<lists.size();i++)
-            if(lists.get(i).getWeek()==tl.getWeek()) lists.set(i, tl);
+            if(lists.get(i).getWeek()==tl.getWeek()) lists.remove(i);
       lists.add(tl);
    }
    
@@ -38,5 +38,16 @@ public class Week implements Serializable
       for(int i=0;i<lists.size();i++)
          if(lists.get(i).getWeek()==w) return true;
       return false;
+   }
+   
+   public TaskList getTaskListByWeek(int w)
+   {
+      TaskList temp=new TaskList();
+      if(isThereAWeek(w))
+      {
+         for(int i=0;i<lists.size();i++)
+         if(lists.get(i).getWeek()==w) temp=lists.get(i);
+      }
+      return temp;
    }
 }

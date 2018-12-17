@@ -146,10 +146,6 @@ public class AnalysisTab extends JPanel
             al.addAnalysis(newAnalysis);
             adapter.saveAnalyses(al);
             
-            AnalysisList a=adapter.getAllAnalysis();
-            for(int i=0;i<a.size();i++)
-               System.out.println(a.getAnalysis(i).getName());
-            
             updateAnalysisList();
             }
             

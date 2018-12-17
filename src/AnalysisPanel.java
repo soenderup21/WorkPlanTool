@@ -32,12 +32,31 @@ public class AnalysisPanel extends JPanel
       
       for(int i=0;i<eanalysis.size();i++)
       {
-         cbanalysis.add(new JCheckBox(eanalysis.get(i).getName()));
+         cbanalysis.add(new JCheckBox(eanalysis.get(i).getName(),false));
          add(cbanalysis.get(i));
       }
       
       setBorder(BorderFactory.createEmptyBorder());
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+   }
+   
+   public void setSelected(Analysis[] a)
+   {
+      if(a!=null)
+      for(int i=0;i<a.length;i++)
+      {
+         for(int j=0;j<cbanalysis.size();j++)
+            if(a[i].getName().equals(cbanalysis.get(j).getText())) cbanalysis.get(j).setSelected(true);
+      }
+   }
+   
+   public boolean nothingSelected()
+   {
+      int count=0;
+      for(int i=0;i<cbanalysis.size();i++)
+         if(cbanalysis.get(i).isSelected()) count++;
+      if(count==0) return true;
+      else return false;
    }
    
    public String[] getAllPickedString()
@@ -46,9 +65,6 @@ public class AnalysisPanel extends JPanel
       for(int i=0;i<cbanalysis.size();i++)
          if(cbanalysis.get(i).isSelected()) s.add(cbanalysis.get(i).getText());
       String[] fin=new String[s.size()];
-      
-      for(int i=0;i<cbanalysis.size();i++)
-         cbanalysis.get(i).setSelected(false);
       
       return s.toArray(fin);
    }

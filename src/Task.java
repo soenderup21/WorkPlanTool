@@ -15,6 +15,7 @@ public class Task implements Serializable
    public Task(Employee employee, MyDate date) {
       this.date = date;
       this.employee=employee;
+      analysis=new ArrayList<Analysis>();
    }
    
    public void setEmployee(Employee employee)
@@ -37,6 +38,12 @@ public class Task implements Serializable
          analysis.add(a.get(i));
    }
    
+   public void addAnalysis(Analysis a)
+   {
+      if(!a.equals(null))
+         analysis.add(a);
+   }
+   
    /**
     * Gets Analysis
     * @return
@@ -47,6 +54,19 @@ public class Task implements Serializable
       for(int i=0;i<analysis.size();i++)
          a[i]=analysis.get(i);
       return a;
+   }
+   
+   public String getAnalysisInString()
+   {
+      String s="";
+      Analysis[] a=getAnalysis();
+      if(a.length!=0)
+      {
+         s=a[0].getName();
+         for(int i=1;i<a.length;i++)
+            s+=", "+a[i].getName();
+      }
+      return s;
    }
    
    /**

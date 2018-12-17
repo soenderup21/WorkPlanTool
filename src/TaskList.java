@@ -37,6 +37,9 @@ public class TaskList implements Serializable
 	
 	public void addTask(Task task)
 	{
+		for(int i=0;i<tasks.size();i++)
+		   if(task.getEmployee().equals(tasks.get(i).getEmployee()) && task.getDate().equals(tasks.get(i).getDate()))
+		         tasks.remove(i);
 		tasks.add(task);
 	}
 	

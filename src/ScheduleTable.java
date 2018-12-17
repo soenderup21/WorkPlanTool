@@ -8,12 +8,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -33,6 +35,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
+import javax.swing.text.NumberFormatter;
 
 public class ScheduleTable extends JPanel
 {
@@ -96,9 +99,7 @@ public class ScheduleTable extends JPanel
       weeks=adapter.getAllTasks();
       tasks=new TaskList();
       if(weeks.isThereAWeek(monday.getWeek()))
-         for(int i=0;i<weeks.size();i++)
-            if(weeks.getList(i).getWeek()==monday.getWeek())
-               tasks=weeks.getList(i);
+         tasks=weeks.getTaskListByWeek(monday.getWeek());
       
       //setting the header of the table
       dayOfTheWeek = new String[6];
@@ -118,6 +119,23 @@ public class ScheduleTable extends JPanel
       schedule.getTableHeader().setReorderingAllowed(false);
       schedule.getTableHeader().setResizingAllowed(false);
       schedule.setPreferredScrollableViewportSize(new Dimension(706, schedule.getRowHeight()*24));
+      
+      schedule.addMouseListener(new java.awt.event.MouseAdapter() {
+         public void mouseClicked(java.awt.event.MouseEvent evt) {
+             int row = schedule.rowAtPoint(evt.getPoint());
+             int col = schedule.columnAtPoint(evt.getPoint());
+             if (row >= 0 && col > 0) {
+                if(analysisP.countComponents()!=0)
+                {
+                   analysisP.remove(analysisScroll);
+                   analysisP.remove(doneButton);
+                }
+                updateAnalysisPanel();
+                sidePanelEnabled(true);
+             }
+         }
+     }); 
+      
       
       //adding table listener so we can keep track of users selections
       listSelectionModel = schedule.getSelectionModel();
@@ -188,6 +206,7 @@ public class ScheduleTable extends JPanel
       searchField.setToolTipText("Enter the number of the week");
       searchButton=new JButton("Search"); //add image
       searchButton.setBorder(BorderFactory.createEmptyBorder());
+      searchButton.addActionListener(listen);
       searchPanel.add(searchField);
       searchPanel.add(searchButton);
       
@@ -235,27 +254,22 @@ public class ScheduleTable extends JPanel
       EmployeeList employees=eAdapter.getEmployeeList();
       Object[][] data= new Object[employees.size()][6];
       
+      weeks=adapter.getAllTasks();
+      tasks=new TaskList();
+      if(weeks.isThereAWeek(monday.getWeek()))
+         tasks=weeks.getTaskListByWeek(monday.getWeek());
+      
       for(int i=0;i<employees.size();i++)
-      {    
+      {
          for(int j=0;j<6;j++)
          {
             if(j==0) data[i][j]=employees.get(i).getIntials(); //setting first column
-            if(tasks.getTasks(employees.get(i)).getTaskCount()!=0) //checking if list has this employee
+            else
             {
-               TaskList el=tasks.getTasks(employees.get(i));
-               for(int l=0;l<el.getTaskCount();l++)
-               {
-                  if(el.getTask(employees.get(i), monday.getDayOfWeek(j))==null) //checking if there is task like this
-                  {
-                     data[i][j]=new Task(employees.get(i), monday.getDayOfWeek(j));
-                     tasks.addTask((Task)data[i][j]);
-                  }
-                  else data[i][j]=el.getTask(employees.get(i), monday.getDayOfWeek(j));
-               }
+               if(tasks.getTask(employees.get(i), monday.getDayOfWeek(j-1))!=null)
+                  data[i][j]=tasks.getTask(employees.get(i), monday.getDayOfWeek(j-1)).getAnalysisInString();
             }
          }
-         weeks.addTaskList(tasks);
-         adapter.saveTasks(weeks);
       }
       
       DefaultTableModel tableModel = new DefaultTableModel(data, dayOfTheWeek) {
@@ -269,6 +283,11 @@ public class ScheduleTable extends JPanel
       listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       listSelectionModel.addListSelectionListener(tableListen);
       schedule.setSelectionModel(listSelectionModel);
+      
+      DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+      r.setToolTipText("Click on right panel to refresh!");
+      for(int i=0;i<6;i++)
+         schedule.getColumnModel().getColumn(i).setCellRenderer(r);
    }
    
    
@@ -291,9 +310,22 @@ public class ScheduleTable extends JPanel
    public void updateAnalysisPanel()
    {
       int r=schedule.getSelectedRow();
-      analysisP.removeAll();
+      int c=schedule.getSelectedColumn();
+      
+      EmployeeList list=eAdapter.getEmployeeList();
+      
+      if(analysisP.countComponents()!=0)
+      {
+         analysisP.remove(analysisScroll);
+         analysisP.remove(doneButton);
+      }
+      
       analysisP.setLayout(new BorderLayout());
       analysisPanel=new AnalysisPanel(r);
+      
+      if(tasks.getTask(list.get(r), monday.getDayOfWeek(c-1))!=null)
+         analysisPanel.setSelected(tasks.getTask(list.get(r), monday.getDayOfWeek(c-1)).getAnalysis());
+      
       analysisScroll=new JScrollPane(analysisPanel);
       analysisScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
       doneButton= new JButton("DONE");
@@ -319,31 +351,51 @@ public class ScheduleTable extends JPanel
    
    public void setTableValue(String[] a)
    {
-      String s=a[0];
-      if(a.length!=1)
-         for(int i=1;i<a.length;i++)
-            s+=", "+a[i];
-      String fin=s;
+      
       int r=schedule.getSelectedRow();
       int c=schedule.getSelectedColumn();
-      if(r!=-1 && c!=-1)
-      schedule.getModel().setValueAt(fin, r, c);
       
       EmployeeList employees=(EmployeeList)eAdapter.getEmployeeList();
       
       Task t=new Task(employees.get(r), monday.getDayOfWeek(c-1));
       
-      ArrayList<Analysis> an=employees.get(r).getAllAnalyses();
-      ArrayList<Analysis> na=new ArrayList<Analysis>();
-      for(int i=0;i<a.length;i++)
-         for(int j=0;j<an.size();j++)
-            if(a[i].equals(an.get(j).getName())) na.add((Analysis)an.get(j));
+      System.out.println(monday.getDayOfWeek(c-1));
       
-      t.addAnalysisArray(na);
+      if(!analysisPanel.nothingSelected())
+      {
+         String s=a[0];
+         if(a.length!=1)
+            for(int i=1;i<a.length;i++)
+               s+=", "+a[i];
+         String fin=s;
+         
+         if(r!=-1 && c!=-1)
+            schedule.getModel().setValueAt(fin, r, c);
+         
+         ArrayList<Analysis> an=employees.get(r).getAllAnalyses();
+         ArrayList<Analysis> na=new ArrayList<Analysis>();
+         for(int i=0;i<a.length;i++)
+            for(int j=0;j<an.size();j++)
+               if(a[i].equals(an.get(j).getName())) na.add((Analysis)an.get(j));
+         
+         t.addAnalysisArray(na);
+      }
+      else schedule.getModel().setValueAt(" ", r, c);
+     
+      if(analysisP.countComponents()!=0)
+      {
+         analysisP.remove(analysisScroll);
+         analysisP.remove(doneButton);
+      }
       
       tasks.addTask(t);
       weeks.addTaskList(tasks);
       adapter.saveTasks(weeks);
+      
+      Week nw=adapter.getAllTasks();
+      System.out.println(nw.size());
+      TaskList tl=nw.getList(0);
+      System.out.println(tl.getTaskCount());
    }
    
    
@@ -363,8 +415,19 @@ public class ScheduleTable extends JPanel
          
          if(e.getSource()==searchButton)
          {
-            String s=searchField.getText();
-            //if you can find set the week if not joption
+            try 
+            {
+                int n = Integer.parseInt(searchField.getText()); 
+                updateTable(MyDate.getMondayOfWeek(n));
+                searchField.setText("");
+            }
+            catch (NumberFormatException e1) 
+            { 
+                   JOptionPane.showMessageDialog(getParent(), "Wrong input!",
+                      "Error", JOptionPane.ERROR_MESSAGE);
+                   searchField.setText("");
+                   return;
+          }
          }
          
          if(e.getSource()==doneButton)
@@ -374,7 +437,6 @@ public class ScheduleTable extends JPanel
             if(choice==JOptionPane.YES_OPTION) 
             {
                String[] list= analysisPanel.getAllPickedString();
-               if(list.length!=0)
                setTableValue(list);
                sidePanelEnabled(false);
             }
@@ -408,9 +470,17 @@ public class ScheduleTable extends JPanel
    {
       public void valueChanged(ListSelectionEvent e)
       {
+         if(analysisP.countComponents()!=0)
+         {
+            analysisP.remove(analysisScroll);
+            analysisP.remove(doneButton);
+         }
          int c=schedule.getSelectedColumn();
-         if(c>0)
+         int r=schedule.getSelectedRow();
+         if(c>0 && r>-1)
+         {
             updateAnalysisPanel();
+         }
          sidePanelEnabled(true);
          System.out.println(schedule.getSelectedRow());
       }
